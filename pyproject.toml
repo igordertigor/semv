@@ -1,0 +1,13 @@
+[project]
+name = "semv"
+authors = [
+  {name = "Ingo Fruend", email = "github@ingofruend.net"},
+]
+readme = "README.md"
+requires_python = ">=3.8"
+license = { text = "BSD-3-Clause"}
+keywords = ["Semantic Versioning"]
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
