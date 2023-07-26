@@ -7,7 +7,8 @@ from dataclasses import dataclass, replace
 @dataclass
 class RawCommit:
     sha: str
-    message: str
+    title: str
+    body: str
 
 
 @dataclass
