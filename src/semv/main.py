@@ -1,5 +1,4 @@
 import sys
-import warnings
 from . import errors
 from . import commands
 
@@ -8,7 +7,7 @@ def main():
     try:
         print(commands.version_string(), end='')
     except errors.NoNewVersion:
-        warnings.warn('No changes for new version')
+        sys.stderr.write('WARNING: No changes for new version\n')
         sys.exit(1)
     except errors.InvalidCommitType:
         sys.exit(2)

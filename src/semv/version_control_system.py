@@ -6,7 +6,11 @@ from .interface import Version, VersionControlSystem, RawCommit
 
 class Git(VersionControlSystem):
     def get_current_version(self) -> Version:
-        v = subprocess.check_output('git tag', shell=True).decode('utf-8')
+        v = (
+            subprocess.check_output('git tag', shell=True)
+            .decode('utf-8')
+            .splitlines()[-1]
+        )
 
         return Version.from_string(v)
 

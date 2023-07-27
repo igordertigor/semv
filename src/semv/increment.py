@@ -1,5 +1,5 @@
 from typing import Iterator
-import warnings
+import sys
 from .interface import VersionIncrementer
 from . import config
 from . import errors
@@ -35,5 +35,7 @@ class DefaultIncrementer(VersionIncrementer):
         if self.invalid_commit_action == InvalidCommitAction.error:
             raise errors.InvalidCommitType
         elif self.invalid_commit_action == InvalidCommitAction.warning:
-            warnings.warn(f'Invalid commit type {commit.type}')
+            sys.stderr.write(
+                f'WARNING: Invalid commit type {commit.type}\n',
+            )
         return VersionIncrement.skip
