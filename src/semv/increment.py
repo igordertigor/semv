@@ -1,15 +1,9 @@
 from typing import List
-from enum import Enum
 import warnings
-from .interface import VersionIncrementer, VersionIncrement, Commit
+from .interface import VersionIncrementer
 from . import config
 from . import errors
-
-
-class InvalidCommitAction(str, Enum):
-    error = 'error'
-    warning = 'warning'
-    skip = 'skip'
+from .types import VersionIncrement, Commit, InvalidCommitAction
 
 
 class DefaultIncrementer(VersionIncrementer):
