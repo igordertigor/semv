@@ -6,7 +6,7 @@ from . import commands
 
 def main():
     try:
-        print(commands.version_string())
+        print(commands.version_string(), end='')
     except errors.NoNewVersion:
         warnings.warn('No changes for new version')
         sys.exit(1)
