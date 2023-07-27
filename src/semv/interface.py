@@ -24,7 +24,9 @@ class CommitParser(ABC):
 
 class VersionIncrementer(ABC):
     @abstractmethod
-    def get_version_increment(self, commits: Iterator[Commit]) -> VersionIncrement:
+    def get_version_increment(
+        self, commits: Iterator[Commit]
+    ) -> VersionIncrement:
         pass
 
 
