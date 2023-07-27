@@ -33,6 +33,5 @@ class DefaultIncrementer(VersionIncrementer):
         if self.invalid_commit_action == InvalidCommitAction.error:
             raise errors.InvalidCommitType
         elif self.invalid_commit_action == InvalidCommitAction.warning:
-            warnings.warn(f'Invalid commit type {type}')
-        else:
-            return VersionIncrement.skip
+            warnings.warn(f'Invalid commit type {commit.type}')
+        return VersionIncrement.skip
