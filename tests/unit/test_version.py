@@ -17,5 +17,10 @@ class TestVersion:
         inc = VersionIncrement.patch
         assert str(v + inc) == 'v1.0.1'
 
+    def test_no_increment(self):
+        v = Version()
+        inc = VersionIncrement.skip
+        assert str(v + inc) == 'v1.0.0'
+
     def test_from_string(self):
         assert str(Version.from_string('v3.2.5')) == 'v3.2.5'

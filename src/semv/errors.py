@@ -1,0 +1,2 @@
+class InvalidCommitType(Exception):
+    pass

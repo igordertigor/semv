@@ -20,9 +20,11 @@ class Commit:
 
 
 class VersionIncrement(str, Enum):
-    major = 'major'
-    minor = 'minor'
+    # NOTE: The values here are alphabetically sorted. This is used downstream
+    skip = 'skip'
     patch = 'patch'
+    minor = 'minor'
+    major = 'major'
 
 
 @dataclass
@@ -45,6 +47,8 @@ class Version:
         return f'v{self.major}.{self.minor}.{self.patch}'
 
     def __add__(self, inc: VersionIncrement) -> 'Version':
+        if inc == VersionIncrement.skip:
+            return self
         kw = {inc.value: getattr(self, inc.value) + 1}
         return replace(self, **kw)
 
