@@ -18,7 +18,7 @@ class DefaultIncrementer(VersionIncrementer):
     def get_version_increment(
         self, commits: Iterator[Commit]
     ) -> VersionIncrement:
-        return max(
+        return min(
             (self._commit_to_inc(c) for c in commits), key=lambda vi: vi.value
         )
 
