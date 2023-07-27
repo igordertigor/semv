@@ -19,14 +19,14 @@ class Git(VersionControlSystem):
             'title': '%s',
             'body': '%b',
         }
+        cmd = f"git log --pretty='{json.dumps(fmt)}%n' {current_version}...HEAD",
         commits = (
             subprocess.check_output(
-                f"git log --pretty='{json.dumps(fmt)}' {current_version}...HEAD",
+                cmd,
                 shell=True,
             )
             .decode('utf-8')
-            .splitlines()
         )
-        for json_commit in commits:
-            print(json_commit)
-            yield RawCommit(**json.loads(json_commit))
+        for json_commit in commits.split('\n\n'):
+            if len(json_commit):
+                yield RawCommit(**json.loads(json_commit.replace('\n', ' ')))
