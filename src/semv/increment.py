@@ -1,4 +1,4 @@
-from typing import List
+from typing import Iterator
 import warnings
 from .interface import VersionIncrementer
 from . import config
@@ -15,7 +15,7 @@ class DefaultIncrementer(VersionIncrementer):
     ):
         self.invalid_commit_action = invalid_commit_action
 
-    def get_version_increment(self, commits: List[Commit]) -> VersionIncrement:
+    def get_version_increment(self, commits: Iterator[Commit]) -> VersionIncrement:
         return max(
             (self._commit_to_inc(c) for c in commits), key=lambda vi: vi.value
         )

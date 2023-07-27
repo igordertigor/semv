@@ -1,4 +1,4 @@
-from typing import Iterator, List
+from typing import Iterator
 from abc import ABC, abstractmethod
 
 from .types import Version, RawCommit, Commit, VersionIncrement
@@ -24,7 +24,7 @@ class CommitParser(ABC):
 
 class VersionIncrementer(ABC):
     @abstractmethod
-    def get_version_increment(self, commits: List[Commit]) -> VersionIncrement:
+    def get_version_increment(self, commits: Iterator[Commit]) -> VersionIncrement:
         pass
 
 
