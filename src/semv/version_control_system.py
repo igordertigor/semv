@@ -10,7 +10,6 @@ class Git(VersionControlSystem):
             subprocess.check_output('git tag', shell=True)
             .decode('utf-8')
         )
-        print(v)
 
         return Version.from_string(v)
 
