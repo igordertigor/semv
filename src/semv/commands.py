@@ -18,7 +18,8 @@ def version_string() -> Version:
     vi = DefaultIncrementer(config.invalid_commit_action)
 
     current_version = vcs.get_current_version()
-    commits = (cp.parse(c) for c in vcs.get_commits_without(current_version))
+    commits_or_none = (cp.parse(c) for c in vcs.get_commits_without(current_version))
+    commits = (c for c in commits_or_none if c is not None)
     inc = vi.get_version_increment(commits)
     if inc == VersionIncrement.skip:
         raise errors.NoNewVersion

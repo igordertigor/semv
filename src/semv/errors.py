@@ -4,3 +4,7 @@ class NoNewVersion(Exception):
 
 class InvalidCommitType(Exception):
     pass
+
+
+class InvalidCommitFormat(Exception):
+    pass

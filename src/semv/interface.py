@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Optional
 from abc import ABC, abstractmethod
 
 from .types import Version, RawCommit, Commit, VersionIncrement
@@ -18,7 +18,7 @@ class VersionControlSystem(ABC):
 
 class CommitParser(ABC):
     @abstractmethod
-    def parse(self, commit: RawCommit) -> Commit:
+    def parse(self, commit: RawCommit) -> Optional[Commit]:
         pass
 
 
