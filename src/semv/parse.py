@@ -21,7 +21,6 @@ class AngularCommitParser(CommitParser):
         self.invalid_commit_action = invalid_commit_action
 
     def parse(self, commit: RawCommit) -> Optional[Commit]:
-        print(commit)
         m = self.type_and_scope_pattern.match(commit.title)
         if m is None:
             warn_or_raise(
