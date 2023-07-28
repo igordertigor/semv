@@ -53,5 +53,10 @@ class Version:
     def __add__(self, inc: VersionIncrement) -> 'Version':
         if inc == VersionIncrement.skip:
             return self
-        kw = {inc.value: getattr(self, inc.value) + 1}
-        return replace(self, **kw)
+        elif inc == VersionIncrement.major:
+            return replace(self, major=self.major+1, minor=0, patch=0)
+        elif inc == VersionIncrement.minor:
+            return replace(self, minor=self.minor+1, patch=0)
+        elif inc == VersionIncrement.patch:
+            return replace(self, patch=self.patch+1)
+        raise RuntimeError('This should never happen')
