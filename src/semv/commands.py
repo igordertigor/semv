@@ -14,7 +14,7 @@ def version_string() -> Version:
         InvalidCommitType
     """
     vcs = Git()
-    cp = AngularCommitParser()
+    cp = AngularCommitParser(config.invalid_commit_action)
     vi = DefaultIncrementer(config.invalid_commit_action)
 
     current_version = vcs.get_current_version()

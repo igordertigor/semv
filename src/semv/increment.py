@@ -4,6 +4,7 @@ from .interface import VersionIncrementer
 from . import config
 from . import errors
 from .types import VersionIncrement, Commit, InvalidCommitAction
+from .utils import warn_or_raise
 
 
 class DefaultIncrementer(VersionIncrementer):
@@ -32,10 +33,9 @@ class DefaultIncrementer(VersionIncrementer):
         elif commit.type in config.commit_types_skip:
             return VersionIncrement.skip
 
-        if self.invalid_commit_action == InvalidCommitAction.error:
-            raise errors.InvalidCommitType
-        elif self.invalid_commit_action == InvalidCommitAction.warning:
-            sys.stderr.write(
-                f'WARNING: Invalid commit type {commit.type}\n',
-            )
+        warn_or_raise(
+            f'Commit {commit.sha} has invalid type {commit.type}',
+            self.invalid_commit_action,
+            errors.InvalidCommitType,
+        )
         return VersionIncrement.skip
