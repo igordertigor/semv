@@ -35,6 +35,15 @@ class TestCurrentVersion:
             g = Git()
             assert str(g.get_current_version()) == 'v1.0.0'
 
+    def test_default_version_if_no_tags(self, git_repo):
+        git_repo: Repo
+        git_repo.add_to_file('test.txt', 'First line')
+        git_repo.git('add test.txt')
+        git_repo.git('commit -m "First commit"')
+        with git_repo.as_working_dir():
+            g = Git()
+            assert str(g.get_current_version()) == 'v0.0.0'
+
 
 class TestCommitsWithout:
     def test_commits_without(self, git_repo):
