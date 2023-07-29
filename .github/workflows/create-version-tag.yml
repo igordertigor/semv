@@ -32,3 +32,5 @@ jobs:
       - uses: thejeff77/action-push-tag@v1.0.0
         with:
           tag: ${{ steps.print-version.outputs.semv-out }}
+      - name: Create github release
+        run: echo "Hello"
