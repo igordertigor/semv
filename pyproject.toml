@@ -3,6 +3,7 @@ name = "semv"
 authors = [
   {name = "Ingo Fruend", email = "github@ingofruend.net"},
 ]
+description = "A read-only semantic version commit parsing and validation tool"
 readme = "README.md"
 license = { text = "BSD-3-Clause"}
 keywords = ["Semantic Versioning"]
