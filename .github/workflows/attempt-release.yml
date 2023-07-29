@@ -1,5 +1,9 @@
 name: Attempt release
 on:
+  # We want to release from the master branch.
+  # Assuming that the actual work is done in branches, triggering the workflow
+  # on pushes will ensure that every merged branch can potentially create a new
+  # release
   push:
     branches: ["master"]
 
@@ -7,43 +11,72 @@ jobs:
   create-version-tag:
     runs-on: ubuntu-latest
     environment:
+      # These two are needed by the publish to pypi action
+      # https://github.com/marketplace/actions/pypi-publish
       name: pypi
       url: https://pypi.org/p/semv
     permissions:
-      contents: write
-      id-token: write
+      contents: write  # needed for pushing tags or creating releases
+      id-token: write  # needed for publish to pypi action
     steps:
       - uses: actions/checkout@v3
         with:
+          # IMPORTANT: semv will look at our commit history
+          # we therefore need to fetch all commits, which is done here by
+          # setting fetch-depth to 0. See here for more details on the checkout action:
+          # https://github.com/actions/checkout
           fetch-depth: 0
+
       - name: Setup python 3.8
         uses: actions/setup-python@v4
         with:
+          # Why python3.8? It's the earliest python version that we support
           python-version: "3.8"
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install tox
           pip install -e .
-      - name: Setup git
+
+      - name: Setup git and list existing tags
         run: |
           git config user.name "ci"
           git config user.email "ci"
           git tag
+
       - name: Run tests
+        # This could in principle be skipped if we were strict about only
+        # merging branches that pass all tests. Ensures that accidental merge
+        # conflicts don't break released package
         run: tox
+
       - name: Print version
+        # This is the key step. By setting an id, we can read the output in later steps
         id: print-version
+        # In order to be able to read the output in later steps, we need to
+        # write something that looks like a variable definitionn to the
+        # environment variable GITHUB_OUTPUT
         run: echo "semv-out=$(semv)" >> $GITHUB_OUTPUT
+        # NOTE: This step doesn't check the statuscode of semv (non-zero if no new version)
+
       - uses: thejeff77/action-push-tag@v1.0.0
         with:
+          # Here we refer to the variable that we just wrote the the GITHUB_OUTPUT variable
           tag: ${{ steps.print-version.outputs.semv-out }}
+          # NOTE: This step will fail if semv-out is empty (i.e. there was no
+          # new version) and thus all following steps won't run either.
+
+      # The following steps should be more or less standard python package publishing
+      # Feel free to omit the github release.
       - name: Create github release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.print-version.outputs.semv-out }}
-          generate_release_notes: true
+          generate_release_notes: true   # autogenerate release notes while semv doesn't create change logs yet
+
       - name: Build package
         run: tox -e build
+
       - name: Publish to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
