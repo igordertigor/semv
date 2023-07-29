@@ -29,6 +29,6 @@ jobs:
       - name: Print version
         id: print-version
         run: echo "semv-out=$(semv)" >> $GITHUB_OUTPUT
-      - uses: actions-ecosystem/action-push-tag@v1
+      - uses: thejeff77/action-push-tag@v1.0.0
         with:
           tag: ${{ steps.print-version.outputs.semv-out }}
