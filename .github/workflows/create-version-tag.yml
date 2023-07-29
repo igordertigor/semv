@@ -23,6 +23,7 @@ jobs:
         run: |
           git config user.name "ci"
           git config user.email "ci"
+          git tag
       - name: Run tests
         run: tox
       - name: Create version tag
