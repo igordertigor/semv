@@ -19,6 +19,10 @@ jobs:
           pip install --upgrade pip
           pip install tox
           pip install -e .
+      - name: Setup git
+        run: |
+          git config user.name "ci"
+          git config user.email "ci"
       - name: Run tests
         run: tox
       - name: Create version tag
