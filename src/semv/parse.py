@@ -13,7 +13,7 @@ class AngularCommitParser(CommitParser):
         invalid_commit_action: InvalidCommitAction = InvalidCommitAction.skip,
     ):
         self.type_and_scope_pattern = re.compile(
-            r'(?P<type>\w+)\((?P<scope>\w+)\): .*'
+            r'(?P<type>\w+)\((?P<scope>[a-zA-Z-_]+)\): .*'
         )
         self.breaking_pattern = re.compile(
             r'BREAKING CHANGE: .*', flags=re.DOTALL
