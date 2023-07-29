@@ -3,16 +3,7 @@ script, we will need to perform all code changes using echo commands, which is
 kind of awkward, but it should be sufficient for testing.
 
 We need to run semv in a git repository.
-  $ git init
-  $ git config user.name "tester"
-  $ git config user.email "tester"
-  $ echo "This is the readme" > README.md
-  $ git add README.md
-  $ git commit -m 'docs(readme): Add readme'
-  [master (root-commit) *] docs(readme): Add readme (glob)
-   1 file changed, 1 insertion(+)
-   create mode 100644 README.md
-  $ git tag v0.0.0
+  $ bash "$TESTDIR"/setup.sh
 
 We now have a (non working) initial version v0.0.0 (note however, that this is
 not standard and you might rather want to pick v1.0.0). We will now add a few
