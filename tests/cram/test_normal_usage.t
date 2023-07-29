@@ -4,6 +4,10 @@ kind of awkward, but it should be sufficient for testing.
 
 We need to run semv in a git repository.
   $ bash "$TESTDIR"/setup.sh
+  Initialized empty Git repository in */.git/ (glob)
+  [master (root-commit) *] docs(readme): Add readme (glob)
+   1 file changed, 1 insertion(+)
+   create mode 100644 README.md
 
 We now have a (non working) initial version v0.0.0 (note however, that this is
 not standard and you might rather want to pick v1.0.0). We will now add a few

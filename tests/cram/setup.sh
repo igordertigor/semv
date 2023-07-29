@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git init
+git init 2> /dev/null
 git config user.name "tester"
 git config user.email "tester"
 echo "This is the readme" > README.md
