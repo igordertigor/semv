@@ -26,7 +26,8 @@ jobs:
           git tag
       - name: Run tests
         run: tox
-      - name: Create version tag
-        run: bash -c 'set -eo pipefail; semv | xargs git tag'
-      - name: Push tag to github
-        run: git push --tags origin
+      - name: Print version
+        id: print-version
+        run: semv
+      - name: Try to get the right thing
+        run: echo ${{ steps.print-version.outputs }}
