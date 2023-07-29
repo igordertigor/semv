@@ -28,6 +28,7 @@ jobs:
         run: tox
       - name: Print version
         id: print-version
-        run: semv
-      - name: Try to get the right thing
-        run: echo ${{ steps.print-version.outputs }}
+        run: echo "semv-out=$(semv)" >> $GITHUB_OUTPUT
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.print-version.outputs.semv-out }}
