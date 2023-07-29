@@ -4,21 +4,22 @@ on:
     branches: ["master"]
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v3
-    - name: Setup python 3.8
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.8"
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install tox
-        pip install -e .
-    - name: Run tests
-      run: tox
-    - name: Create version tag
-      run: bash -c 'set -eo pipefail; semv | xargs git tag'
-    - name: Push tag to github
-      run: git push --tags origin
+  create-version-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install tox
+          pip install -e .
+      - name: Run tests
+        run: tox
+      - name: Create version tag
+        run: bash -c 'set -eo pipefail; semv | xargs git tag'
+      - name: Push tag to github
+        run: git push --tags origin
