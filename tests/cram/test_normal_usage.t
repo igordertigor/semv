@@ -3,7 +3,7 @@ script, we will need to perform all code changes using echo commands, which is
 kind of awkward, but it should be sufficient for testing.
 
 We need to run semv in a git repository.
-  $ git init &> /dev/null
+  $ git init
   $ git config user.name "tester"
   $ git config user.email "tester"
   $ echo "This is the readme" > README.md
