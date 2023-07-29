@@ -5,6 +5,8 @@ kind of awkward, but it should be sufficient for testing.
 We need to run semv in a git repository.
   $ git init
   Initialized empty Git repository in */.git/ (glob)
+  $ git config user.name "tester"
+  $ git config user.email "tester"
   $ echo "This is the readme" > README.md
   $ git add README.md
   $ git commit -m 'docs(readme): Add readme'

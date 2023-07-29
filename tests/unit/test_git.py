@@ -15,6 +15,8 @@ def git_repo():
             shell=True,
             cwd=td,
         )
+        subprocess.run('git config user.name "tester"', shell=True, cwd=td)
+        subprocess.run('git config user.email "tester"', shell=True, cwd=td)
         yield Repo(td)
 
 
