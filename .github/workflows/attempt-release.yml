@@ -1,4 +1,4 @@
-name: Create version tag
+name: Attempt release
 on:
   push:
     branches: ["master"]
@@ -6,6 +6,11 @@ on:
 jobs:
   create-version-tag:
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/semv
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -33,4 +38,9 @@ jobs:
         with:
           tag: ${{ steps.print-version.outputs.semv-out }}
       - name: Create github release
-        run: echo "Hello"
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.print-version.outputs.semv-out }}
+          generate_release_notes: true
+      - name: Publish to pypi
+        uses: pypa/gh-action-pypi-publish@release/v1
