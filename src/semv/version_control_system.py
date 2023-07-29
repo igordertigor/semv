@@ -9,10 +9,13 @@ class Git(VersionControlSystem):
         v = (
             subprocess.check_output('git tag', shell=True)
             .decode('utf-8')
-            .splitlines()[-1]
+            .splitlines()
         )
 
-        return Version.from_string(v)
+        if v:
+            return Version.from_string(v[-1])
+        else:
+            return Version(major=0)
 
     def get_commits_without(
         self, current_version: Version
