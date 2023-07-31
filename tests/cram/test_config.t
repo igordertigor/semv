@@ -3,15 +3,19 @@
   [master (root-commit) *] docs(readme): Add readme (glob)
    1 file changed, 1 insertion(+)
    create mode 100644 README.md
-  $ git tag v0.0.0
 
   $ echo "print('Hello')" > myscript.py
   $ git add myscript.py
   $ git commit -m 'Print a message'
+  [master *] Print a message (glob)
+   1 file changed, 1 insertion(+)
+   create mode 100644 myscript.py
 
   $ echo "print('Hello world')" > myscript.py
   $ git add myscript.py
   $ git commit -m 'fix(myscript): Meant to greet world'
+  [master *] fix(myscript): Meant to greet world (glob)
+   1 file changed, 1 insertion(+), 1 deletion(-)
 
   $ echo "[tool.semv]" > pyproject.toml
   $ echo 'invalid_commit_action = "warning"' >> pyproject.toml
