@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from .increment import DefaultIncrementer
 from .parse import AngularCommitParser
 from .version_control_system import Git
@@ -28,12 +29,19 @@ def version_string() -> Version:
         config.invalid_commit_action,
     )
 
-    current_version = vcs.get_current_version()
-    commits_or_none = (
-        cp.parse(c) for c in vcs.get_commits_without(current_version)
-    )
-    commits = (c for c in commits_or_none if c is not None)
-    inc = vi.get_version_increment(commits)
-    if inc == VersionIncrement.skip:
-        raise errors.NoNewVersion
-    return current_version + inc
+    try:
+        current_version = vcs.get_current_version()
+        commits_or_none = (
+            cp.parse(c) for c in vcs.get_commits_without(current_version)
+        )
+        commits = (c for c in commits_or_none if c is not None)
+        inc = vi.get_version_increment(commits)
+        if inc == VersionIncrement.skip:
+            raise errors.NoNewVersion
+        return current_version + inc
+    except errors.InvalidCommitType as e:
+        sys.stderr.write(f'ERROR: {e.args[0]}\n')
+        sys.exit(2)
+    except errors.InvalidCommitFormat as e:
+        sys.stderr.write(f'ERROR: {e.args[0]}\n')
+        sys.exit(2)

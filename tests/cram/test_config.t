@@ -31,4 +31,5 @@
   $ echo "[tool.semv]" > pyproject.toml
   $ echo 'invalid_commit_action = "error"' >> pyproject.toml
   $ semv
-  ERROR: Invalid commit * Print a message (glob)
+  ERROR: Invalid commit: * Print a message (glob)
+  [2]
