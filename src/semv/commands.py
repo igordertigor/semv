@@ -1,7 +1,8 @@
+from pathlib import Path
 from .increment import DefaultIncrementer
 from .parse import AngularCommitParser
 from .version_control_system import Git
-from . import config
+from .config import Config
 from . import errors
 from .types import Version, VersionIncrement
 
@@ -13,9 +14,19 @@ def version_string() -> Version:
         NoNewVersion
         InvalidCommitType
     """
+    pyproject = Path('pyproject.toml')
+    if pyproject.exists():
+        config = Config.parse(pyproject.read_text())
+    else:
+        config = Config()
     vcs = Git()
     cp = AngularCommitParser(config.invalid_commit_action)
-    vi = DefaultIncrementer(config.invalid_commit_action)
+    vi = DefaultIncrementer(
+        config.commit_types_minor,
+        config.commit_types_patch,
+        config.commit_types_skip,
+        config.invalid_commit_action,
+    )
 
     current_version = vcs.get_current_version()
     commits_or_none = (
