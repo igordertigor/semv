@@ -1,5 +1,4 @@
 from typing import Iterator, Set
-import sys
 from .interface import VersionIncrementer
 from . import errors
 from .types import VersionIncrement, Commit, InvalidCommitAction
