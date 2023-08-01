@@ -22,7 +22,7 @@ def main():
         sys.stderr.write('WARNING: No changes for new version\n')
         sys.exit(1)
     except errors.SuspiciousVersionIncrement as e:
-        sys.stderr.write('ERROR: {e.args[0]}\n')
+        sys.stderr.write(f'ERROR: {e.args[0]}\n')
         sys.exit(3)
     except errors.InvalidCommitType as e:
         sys.stderr.write(f'ERROR: {e.args[0]}\n')

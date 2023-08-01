@@ -28,11 +28,11 @@ class Hooks:
         self.checks.append(check)
 
 
-def dummy_version_estimator_skips(
+def dummy_version_estimator_skip(
     current_version: Version,
 ) -> VersionIncrement:
     sys.stderr.write(
-        'Dummy version estimator called on version {current_version}\n'
+        f'Dummy version estimator called on version {current_version}\n'
     )
     return VersionIncrement.skip
 
@@ -41,6 +41,6 @@ def dummy_version_estimator_major(
     current_version: Version,
 ) -> VersionIncrement:
     sys.stderr.write(
-        'Dummy version estimator called on version {current_version}\n'
+        f'Dummy version estimator called on version {current_version}\n'
     )
     return VersionIncrement.major
