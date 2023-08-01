@@ -25,3 +25,22 @@ If you are inside a git repository, you can use semv to print the semantic versi
   v1.0.5 (no-eol)
 
 Note that this will have not change anything about your repository. It is up to you to use the printed version. An example for using the printed version is given in semv's own [release workflow](https://github.com/igordertigor/semv/blob/master/.github/workflows/attempt-release.yml).
+
+## Configuration
+
+You can configure semv via the `pyproject.toml` config file. Here are the defaults:
+```toml
+[tool.semv]
+invalid_commit_action = "warning"  # Could also be "error" or "skip"
+
+[tool.types]
+feat = "minor"
+fix = "patch"
+perf = "patch"
+chore = "valid"
+test = "valid"
+docs = "valid"
+ci = "valid"
+refactor = "valid"
+style = "valid"
+```
