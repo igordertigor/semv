@@ -8,6 +8,9 @@ readme = "README.md"
 license = { text = "BSD-3-Clause"}
 keywords = ["Semantic Versioning"]
 dynamic = ["version"]
+dependencies = [
+  "tomli"
+]
 
 [build-system]
 requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
