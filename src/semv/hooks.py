@@ -1,5 +1,6 @@
 from typing import Callable, List
 import sys
+from operator import attrgetter
 from .types import Version, VersionIncrement
 
 VersionEstimator = Callable[[Version], VersionIncrement]
@@ -14,11 +15,12 @@ class Hooks:
     def estimate_version_increment(
         self, current_version: Version
     ) -> VersionIncrement:
-        check_results = (check() for check in self.checks)
+        check_results = (check(current_version) for check in self.checks)
         return VersionIncrement(
             min(
-                (x.value for x in check_results),
-                default=VersionIncrement.skip.value,
+                (x for x in check_results),
+                key=attrgetter('value'),
+                default=VersionIncrement.skip,
             )
         )
 

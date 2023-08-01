@@ -1,4 +1,5 @@
 from typing import Iterator, Set
+from operator import attrgetter
 from .interface import VersionIncrementer
 from . import errors
 from .types import VersionIncrement, Commit, InvalidCommitAction
@@ -28,8 +29,8 @@ class DefaultIncrementer(VersionIncrementer):
     ) -> VersionIncrement:
         return min(
             (self._commit_to_inc(c) for c in commits),
-            key=lambda vi: vi.value,
-            default=VersionIncrement.skip.value,
+            key=attrgetter('value'),
+            default=VersionIncrement.skip,
         )
 
     def _commit_to_inc(self, commit: Commit) -> VersionIncrement:
