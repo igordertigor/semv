@@ -27,7 +27,9 @@ class DefaultIncrementer(VersionIncrementer):
         self, commits: Iterator[Commit]
     ) -> VersionIncrement:
         return min(
-            (self._commit_to_inc(c) for c in commits), key=lambda vi: vi.value
+            (self._commit_to_inc(c) for c in commits),
+            key=lambda vi: vi.value,
+            default=VersionIncrement.skip.value,
         )
 
     def _commit_to_inc(self, commit: Commit) -> VersionIncrement:
