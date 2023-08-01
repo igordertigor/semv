@@ -20,6 +20,11 @@ def version_string() -> Version:
         config = Config.parse(pyproject.read_text())
     else:
         config = Config()
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--list-types':
+        print(config.format_types())
+        sys.exit(0)
+
     vcs = Git()
     cp = AngularCommitParser(config.invalid_commit_action)
     vi = DefaultIncrementer(
