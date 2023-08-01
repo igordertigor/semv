@@ -4,7 +4,7 @@ from .version_control_system import Git
 from .config import Config
 from . import errors
 from .types import Version, VersionIncrement
-from .hooks import Hooks
+from . import hooks
 
 
 def list_types(config: Config) -> str:
@@ -28,7 +28,9 @@ def version_string(config: Config) -> Version:
         config.commit_types_skip,
         config.invalid_commit_action,
     )
-    hooks = Hooks()
+    h = hooks.Hooks()
+    for name in config.checks:
+        h.register(getattr(hooks, name))
 
     current_version = vcs.get_current_version()
     commits_or_none = (
@@ -36,7 +38,7 @@ def version_string(config: Config) -> Version:
     )
     commits = (c for c in commits_or_none if c is not None)
     inc = vi.get_version_increment(commits)
-    estimated_inc = hooks.estimate_version_increment(current_version)
+    estimated_inc = h.estimate_version_increment(current_version)
     if estimated_inc.value < inc.value:
         raise errors.SuspiciousVersionIncrement(
             f'Commits suggest {inc.value} increment,'

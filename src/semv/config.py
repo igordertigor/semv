@@ -22,6 +22,7 @@ class Config:
         }
     )
     invalid_commit_action: InvalidCommitAction = InvalidCommitAction.warning
+    checks: Set[str] = field(default_factory=set)
 
     @classmethod
     def parse(cls, text: str):
