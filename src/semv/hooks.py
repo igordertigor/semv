@@ -1,6 +1,10 @@
-from typing import Callable, List
+from typing import List, Union
 from abc import ABC, abstractmethod
 import sys
+import os
+import glob
+import subprocess
+from tempfile import TemporaryDirectory
 from operator import attrgetter
 from .types import Version, VersionIncrement
 
@@ -48,3 +52,41 @@ class DummyVersionEstimator(VersionEstimator):
             f' increment {self.increment}\n'
         )
         return self.increment
+
+
+class RunPreviousVersionsTestsTox(VersionEstimator):
+    toxenv: List[str]
+
+    def __init__(self, toxenv: Union[str, List[str]]):
+        if isinstance(toxenv, str):
+            self.toxenv = [toxenv]
+        else:
+            self.toxenv = toxenv
+
+    def run(self, current_version: Version) -> VersionIncrement:
+        source_dir = os.path.abspath(os.path.curdir)
+        build_proc = subprocess.run(
+            'python -m build', shell=True, capture_output=True,
+        )
+        build_proc.check_returncode()
+        package = os.path.join(source_dir, max(glob.glob('dist/*.whl')))
+        with TemporaryDirectory() as tempdir:
+            git_proc = subprocess.run(
+                f'git clone --depth 1 --branch {current_version}'
+                f' file://{source_dir}/.git .',
+                shell=True,
+                capture_output=True,
+                cwd=tempdir,
+            )
+            git_proc.check_returncode()
+            envs = ','.join(self.toxenv)
+            test_proc = subprocess.run(
+                f'tox --installpkg {package} -e "{envs}" -- -v',
+                shell=True,
+                cwd=tempdir,
+                capture_output=True,
+            )
+            if test_proc.returncode:
+                sys.stderr.write(test_proc.stdout.decode('utf-8'))
+                return VersionIncrement.major
+        return VersionIncrement.skip
