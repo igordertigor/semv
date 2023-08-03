@@ -30,7 +30,7 @@ def version_string(config: Config) -> Version:
     )
     h = hooks.Hooks()
     for name in config.checks:
-        h.register(getattr(hooks, name))
+        h.register(getattr(hooks, name)(**config.checks[name]))
 
     current_version = vcs.get_current_version()
     commits_or_none = (
