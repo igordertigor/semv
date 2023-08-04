@@ -2,8 +2,10 @@ from typing import List, Union
 from abc import ABC, abstractmethod
 import sys
 import os
+import shutil
 import glob
 import subprocess
+import tomli
 from tempfile import TemporaryDirectory
 from operator import attrgetter
 from .types import Version, VersionIncrement
@@ -66,7 +68,9 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
     def run(self, current_version: Version) -> VersionIncrement:
         source_dir = os.path.abspath(os.path.curdir)
         build_proc = subprocess.run(
-            'python -m build', shell=True, capture_output=True,
+            'python -m build',
+            shell=True,
+            capture_output=True,
         )
         build_proc.check_returncode()
         package = os.path.join(source_dir, max(glob.glob('dist/*.whl')))
@@ -79,6 +83,16 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                 cwd=tempdir,
             )
             git_proc.check_returncode()
+
+            possible_misleading_imports = glob.glob(
+                os.path.join(tempdir, f'{get_package_name()}.*')
+            )
+            if possible_misleading_imports:
+                src_layout = os.path.join(tempdir, 'src')
+                os.makedirs(src_layout, exist_ok=True)
+                for fake_import in possible_misleading_imports:
+                    shutil.move(fake_import, src_layout)
+
             envs = ','.join(self.toxenv)
             test_proc = subprocess.run(
                 f'tox --installpkg {package} -e "{envs}" -- -v',
@@ -90,3 +104,14 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                 sys.stderr.write(test_proc.stdout.decode('utf-8'))
                 return VersionIncrement.major
         return VersionIncrement.skip
+
+
+def get_package_name() -> str:
+    if os.path.exists('pyproject.toml'):
+        with open('pyproject.toml') as f:
+            cfg = tomli.loads(f.read())
+        return cfg['project']['name']
+    else:
+        raise NotImplementedError(
+            'Only supporting files configured through pyproject.toml at the moment'
+        )
