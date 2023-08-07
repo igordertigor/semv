@@ -72,11 +72,11 @@ Introduce a breaking change
    1 file changed, 1 insertion(+), 1 deletion(-)
   $ semv
   unit: install_deps> python -I -m pip install pytest
-  unit: install_package> python -I -m pip install --force-reinstall --no-deps /tmp/cramtests-*/test_old_tests_on_new_version_importable_module.t/dist/mypack-1.0.1.dev2+*-py3-none-any.whl (glob)
+  unit: install_package> python -I -m pip install --force-reinstall --no-deps */mypack-1.0.1.dev2+*-py3-none-any.whl (glob)
   unit: commands[0]> pytest -v tests.py
   ============================= test session starts ==============================
-  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 -- /tmp/cramtests-*/.tox/unit/bin/python (glob)
-  cachedir: .tox/unit/.pytest_cache
+  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 -- *.tox/unit/bin/python (glob)
+  cachedir: *.tox/unit/.pytest_cache (glob)
   rootdir: /tmp/cramtests-* (glob)
   collecting ... collected 1 item
   
