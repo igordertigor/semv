@@ -15,6 +15,12 @@ Tox
   $ echo "[testenv:unit]" >> tox.ini
   $ echo "deps = pytest" >> tox.ini
   $ echo "commands = pytest {posargs} tests.py" >> tox.ini
+  $ echo "" >> tox.ini
+  $ echo "[testenv:build]" >> tox.ini
+  $ echo "deps = build" >> tox.ini
+  $ echo "skip_install = true" >> tox.ini
+  $ echo "skip_dist = true" >> tox.ini
+  $ echo "commands = python -m build" >> tox.ini
 
 pyproject
   $ echo "[project]" > pyproject.toml
@@ -42,13 +48,13 @@ make sure this works
   $ tox
   unit: install_deps> python -I -m pip install pytest
   .pkg: install_requires> python -I -m pip install 'setuptools>=45' 'setuptools_scm[toml]>=6.2'
-  .pkg: _optional_hooks> python */semv/.venv/lib/python3.8/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
-  .pkg: get_requires_for_build_sdist> python */semv/.venv/lib/python3.8/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
-  .pkg: build_sdist> python */semv/.venv/lib/python3.8/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
+  .pkg: _optional_hooks> python */semv/.venv/lib/python3.*/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
+  .pkg: get_requires_for_build_sdist> python */semv/.venv/lib/python3.*/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
+  .pkg: build_sdist> python */semv/.venv/lib/python3.*/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
   unit: install_package> python -I -m pip install --force-reinstall --no-deps /tmp/cramtests-*/test_old_tests_on_new_version.t/.tox/.tmp/package/1/mypack-0.0.0.tar.gz (glob)
   unit: commands[0]> pytest tests.py
   ============================= test session starts ==============================
-  platform linux -- Python 3.8.10, pytest-7.4.0, pluggy-1.2.0
+  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0
   cachedir: .tox/unit/.pytest_cache
   rootdir: /tmp/cramtests-*/test_old_tests_on_new_version.t (glob)
   collected 1 item
@@ -56,7 +62,7 @@ make sure this works
   tests.py .                                                               [100%]
   
   ============================== 1 passed in 0.00s ===============================
-  .pkg: _exit> python */semv/.venv/lib/python3.8/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
+  .pkg: _exit> python */semv/.venv/lib/python3.*/site-packages/pyproject_api/_backend.py True setuptools.build_meta (glob)
     unit: OK (*=setup[*]+cmd[*] seconds) (glob)
     congratulations :) (* seconds) (glob)
 
@@ -64,7 +70,7 @@ Commit
   $ git add src/mypack.py tests.py tox.ini pyproject.toml
   $ git commit -m "feat(mypack): Initial implementation"
   [master *] feat(mypack): Initial implementation (glob)
-   4 files changed, 22 insertions(+)
+   4 files changed, 28 insertions(+)
    create mode 100644 pyproject.toml
    create mode 100644 src/mypack.py
    create mode 100644 tests.py
@@ -92,7 +98,7 @@ Introduce a breaking change
   unit: install_package> python -I -m pip install --force-reinstall --no-deps /tmp/cramtests-*/test_old_tests_on_new_version.t/dist/mypack-1.0.1.dev2+*-py3-none-any.whl (glob)
   unit: commands[0]> pytest -v tests.py
   ============================= test session starts ==============================
-  platform linux -- Python 3.8.10, pytest-7.4.0, pluggy-1.2.0 -- /tmp/cramtests-*/.tox/unit/bin/python (glob)
+  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 -- /tmp/cramtests-*/.tox/unit/bin/python (glob)
   cachedir: .tox/unit/.pytest_cache
   rootdir: /tmp/cramtests-* (glob)
   collecting ... collected 1 item

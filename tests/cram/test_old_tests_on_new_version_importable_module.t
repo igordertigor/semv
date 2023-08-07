@@ -15,6 +15,12 @@ Tox
   $ echo "[testenv:unit]" >> tox.ini
   $ echo "deps = pytest" >> tox.ini
   $ echo "commands = pytest {posargs} tests.py" >> tox.ini
+  $ echo "" >> tox.ini
+  $ echo "[testenv:build]" >> tox.ini
+  $ echo "deps = build" >> tox.ini
+  $ echo "skip_install = true" >> tox.ini
+  $ echo "skip_dist = true" >> tox.ini
+  $ echo "commands = python -m build" >> tox.ini
 
 pyproject
   $ echo "[project]" > pyproject.toml
@@ -41,7 +47,7 @@ Commit
   $ git add mypack.py tests.py tox.ini pyproject.toml
   $ git commit -m "feat(mypack): Initial implementation"
   [master *] feat(mypack): Initial implementation (glob)
-   4 files changed, 22 insertions(+)
+   4 files changed, 28 insertions(+)
    create mode 100644 mypack.py
    create mode 100644 pyproject.toml
    create mode 100644 tests.py
@@ -69,7 +75,7 @@ Introduce a breaking change
   unit: install_package> python -I -m pip install --force-reinstall --no-deps /tmp/cramtests-*/test_old_tests_on_new_version_importable_module.t/dist/mypack-1.0.1.dev2+*-py3-none-any.whl (glob)
   unit: commands[0]> pytest -v tests.py
   ============================= test session starts ==============================
-  platform linux -- Python 3.8.10, pytest-7.4.0, pluggy-1.2.0 -- /tmp/cramtests-*/.tox/unit/bin/python (glob)
+  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 -- /tmp/cramtests-*/.tox/unit/bin/python (glob)
   cachedir: .tox/unit/.pytest_cache
   rootdir: /tmp/cramtests-* (glob)
   collecting ... collected 1 item

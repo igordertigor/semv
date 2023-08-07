@@ -68,7 +68,7 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
     def run(self, current_version: Version) -> VersionIncrement:
         source_dir = os.path.abspath(os.path.curdir)
         build_proc = subprocess.run(
-            'python -m build',
+            'tox -e build',
             shell=True,
             capture_output=True,
         )
