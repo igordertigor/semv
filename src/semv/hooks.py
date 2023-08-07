@@ -63,6 +63,20 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
     def __init__(
         self, testenv: Union[str, List[str]], buildenv: str = 'build'
     ):
+        """Run tests from previous version on new version
+
+        This is an attempt to automatically detect breaking versions. If
+        the tests from the previous version fail, then we can assume
+        that the version most likely contains a breaking change.
+
+        Parameters:
+            testenv:
+                Name of the environment(s) that contain the actual tests to run.
+            buildenv:
+                To build the current version's package, we run this tox
+                environment. It should create a wheel file in the
+                `dist/` folder.
+        """
         if isinstance(testenv, str):
             self.testenv = [testenv]
         else:
