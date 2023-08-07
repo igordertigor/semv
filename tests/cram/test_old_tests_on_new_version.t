@@ -80,7 +80,7 @@ Commit
 Now configure the checks
   $ echo "" >> pyproject.toml
   $ echo "[tool.semv.checks]" >> pyproject.toml
-  $ echo 'RunPreviousVersionsTestsTox = {toxenv = "unit"}' >> pyproject.toml
+  $ echo 'RunPreviousVersionsTestsTox = {testenv = "unit"}' >> pyproject.toml
   $ git add pyproject.toml
   $ git commit -m "chore(semv): Add semv config"
   [master *] chore(semv): Add semv config (glob)

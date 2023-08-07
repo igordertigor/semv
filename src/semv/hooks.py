@@ -57,18 +57,22 @@ class DummyVersionEstimator(VersionEstimator):
 
 
 class RunPreviousVersionsTestsTox(VersionEstimator):
-    toxenv: List[str]
+    testenv: List[str]
+    buildenv: str
 
-    def __init__(self, toxenv: Union[str, List[str]]):
-        if isinstance(toxenv, str):
-            self.toxenv = [toxenv]
+    def __init__(
+        self, testenv: Union[str, List[str]], buildenv: str = 'build'
+    ):
+        if isinstance(testenv, str):
+            self.testenv = [testenv]
         else:
-            self.toxenv = toxenv
+            self.testenv = testenv
+        self.buildenv = buildenv
 
     def run(self, current_version: Version) -> VersionIncrement:
         source_dir = os.path.abspath(os.path.curdir)
         build_proc = subprocess.run(
-            'tox -e build',
+            f'tox -e {self.buildenv}',
             shell=True,
             capture_output=True,
         )
@@ -93,7 +97,7 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                 for fake_import in possible_misleading_imports:
                     shutil.move(fake_import, src_layout)
 
-            envs = ','.join(self.toxenv)
+            envs = ','.join(self.testenv)
             test_proc = subprocess.run(
                 f'tox --installpkg {package} -e "{envs}" -- -v',
                 shell=True,
