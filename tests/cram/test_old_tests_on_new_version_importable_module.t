@@ -71,18 +71,6 @@ Introduce a breaking change
   [master *] feat(mypack): Multiplications are cooler (glob)
    1 file changed, 1 insertion(+), 1 deletion(-)
   $ semv
-  unit: install_deps> python -I -m pip install pytest
-  unit: install_package> python -I -m pip install --force-reinstall --no-deps */mypack-1.0.1.dev2+*-py3-none-any.whl (glob)
-  unit: commands[0]> pytest -v tests.py
-  ============================= test session starts ==============================
-  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 -- *.tox/unit/bin/python (glob)
-  cachedir: *.tox/unit/.pytest_cache (glob)
-  rootdir: /tmp/cramtests-* (glob)
-  collecting ... collected 1 item
-  
-  tests.py::test_regular_sum FAILED                                        [100%]
-  
-  =================================== FAILURES ===================================
   _______________________________ test_regular_sum _______________________________
   
       def test_regular_sum():
@@ -94,9 +82,5 @@ Introduce a breaking change
   tests.py:4: AssertionError
   =========================== short test summary info ============================
   FAILED tests.py::test_regular_sum - assert 2 == 3
-  ============================== 1 failed in *s =============================== (glob)
-  unit: exit 1 (* seconds) /tmp/cramtests-*> pytest -v tests.py pid=* (glob)
-    unit: FAIL code 1 (*=setup[*]+cmd[*] seconds) (glob)
-    evaluation failed :( (* seconds) (glob)
   ERROR: Commits suggest minor increment, but checks imply major increment
   [3]

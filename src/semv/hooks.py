@@ -1,6 +1,7 @@
 from typing import List, Union
 from abc import ABC, abstractmethod
 import sys
+import re
 import os
 import shutil
 import glob
@@ -119,7 +120,12 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                 capture_output=True,
             )
             if test_proc.returncode:
-                sys.stderr.write(test_proc.stdout.decode('utf-8'))
+                m = re.search(
+                    r'=+ FAILURES =+(.*?).=+ \d+ failed in',
+                    test_proc.stdout.decode('utf-8'),
+                    re.DOTALL,
+                )
+                sys.stderr.write(m.group(1).strip() + '\n')
                 return VersionIncrement.major
         return VersionIncrement.skip
 
