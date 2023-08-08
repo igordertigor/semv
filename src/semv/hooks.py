@@ -51,7 +51,7 @@ class DummyVersionEstimator(VersionEstimator):
     ) -> VersionIncrement:
         sys.stderr.write(
             f'Dummy version estimator called on version {current_version},'
-            f' increment {self.increment}\n'
+            f' increment {self.increment.value}\n'
         )
         return self.increment
 
