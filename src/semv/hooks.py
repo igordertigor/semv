@@ -125,7 +125,10 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                     test_proc.stdout.decode('utf-8'),
                     re.DOTALL,
                 )
-                sys.stderr.write(m.group(1).strip() + '\n')
+                if m:
+                    # This will trivially be true, because we already
+                    # know that there was output due to the returncode
+                    sys.stderr.write(m.group(1).strip() + '\n')
                 return VersionIncrement.major
         return VersionIncrement.skip
 
