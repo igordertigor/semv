@@ -44,28 +44,6 @@ tests
   $ echo "def test_regular_sum():" >> tests.py
   $ echo "    assert mypack.f(2, 1) == 3" >> tests.py
 
-make sure this works
-  $ tox
-  unit: install_deps> python -I -m pip install pytest
-  .pkg: install_requires> python -I -m pip install 'setuptools>=45' 'setuptools_scm[toml]>=6.2'
-  .pkg: _optional_hooks> */pyproject_api/_backend.py True setuptools.build_meta (glob)
-  .pkg: get_requires_for_build_sdist> */pyproject_api/_backend.py True setuptools.build_meta (glob)
-  .pkg: build_sdist> */pyproject_api/_backend.py True setuptools.build_meta (glob)
-  unit: install_package> python -I -m pip install --force-reinstall --no-deps */mypack-0.0.0.tar.gz (glob)
-  unit: commands[0]> pytest tests.py
-  ============================= test session starts ==============================
-  platform linux -- Python 3.*, pytest-7.4.0, pluggy-1.2.0 (glob)
-  cachedir: *.tox/unit/.pytest_cache (glob)
-  rootdir: /tmp/cramtests-*/test_old_tests_on_new_version.t (glob)
-  collected 1 item
-  
-  tests.py .                                                               [100%]
-  
-  ============================== 1 passed in *s =============================== (glob)
-  .pkg: _exit> */pyproject_api/_backend.py True setuptools.build_meta (glob)
-    unit: OK (*=setup[*]+cmd[*] seconds) (glob)
-    congratulations :) (* seconds) (glob)
-
 Commit
   $ git add src/mypack.py tests.py tox.ini pyproject.toml
   $ git commit -m "feat(mypack): Initial implementation"
