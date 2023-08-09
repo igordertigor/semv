@@ -15,17 +15,17 @@ Case 1: No hooks
   [1]
 
 Case 2: Hook returns skip
-  $ echo "[tool.semv]" > pyproject.toml
-  $ echo 'checks = ["dummy_version_estimator_skip"]' >> pyproject.toml
+  $ echo "[tool.semv.checks]" > pyproject.toml
+  $ echo 'DummyVersionEstimator = {increment="skip"}' >> pyproject.toml
   $ semv
-  Dummy version estimator called on version v0.0.0
+  Dummy version estimator called on version v0.0.0, increment skip
   WARNING: No changes for new version
   [1]
 
 Case 3: Hook returns major version ~> Failure
-  $ echo "[tool.semv]" > pyproject.toml
-  $ echo 'checks = ["dummy_version_estimator_major"]' >> pyproject.toml
+  $ echo "[tool.semv.checks]" > pyproject.toml
+  $ echo 'DummyVersionEstimator = {increment="major"}' >> pyproject.toml
   $ semv
-  Dummy version estimator called on version v0.0.0
+  Dummy version estimator called on version v0.0.0, increment major
   ERROR: Commits suggest skip increment, but checks imply major increment
   [3]
