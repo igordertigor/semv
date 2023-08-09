@@ -128,7 +128,12 @@ class RunPreviousVersionsTestsTox(VersionEstimator):
                 if m:
                     # This will trivially be true, because we already
                     # know that there was output due to the returncode
-                    sys.stderr.write(m.group(1).strip() + '\n')
+                    closing_line = (
+                        '==========================='
+                        '    end of test report   '
+                        '============================\n'
+                    )
+                    sys.stderr.write(m.group(1).strip() + '\n' + closing_line)
                 return VersionIncrement.major
         return VersionIncrement.skip
 

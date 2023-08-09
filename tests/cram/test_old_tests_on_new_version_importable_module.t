@@ -82,5 +82,6 @@ Introduce a breaking change
   tests.py:4: AssertionError
   =========================== short test summary info ============================
   FAILED tests.py::test_regular_sum - assert 2 == 3
+  ===========================    end of test report   ============================
   ERROR: Commits suggest minor increment, but checks imply major increment
   [3]
