@@ -61,6 +61,8 @@ jobs:
         # NOTE: This step doesn't check the statuscode of semv (non-zero if no new version)
 
       - uses: thejeff77/action-push-tag@v1.0.0
+        # Only run this step if this is a pushed commit and not a tag
+        if: startsWith(github.ref, 'refs/heads/')
         with:
           # Here we refer to the variable that we just wrote the the GITHUB_OUTPUT variable
           tag: ${{ steps.print-version.outputs.semv-out }}
