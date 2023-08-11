@@ -54,6 +54,9 @@ jobs:
       - name: Print version
         # This is the key step. By setting an id, we can read the output in later steps
         id: print-version
+        # We only want to run this step if we are on a pushed commit -- it will
+        # give an exit status of 1 if we are already on a version tag.
+        if: startsWith(github.ref, 'refs/heads/')
         # In order to be able to read the output in later steps, we need to
         # write something that looks like a variable definitionn to the
         # environment variable GITHUB_OUTPUT
