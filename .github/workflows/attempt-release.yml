@@ -10,14 +10,10 @@ on:
 jobs:
   create-version-tag:
     runs-on: ubuntu-latest
-    environment:
-      # These two are needed by the publish to pypi action
-      # https://github.com/marketplace/actions/pypi-publish
-      name: pypi
-      url: https://pypi.org/p/semv
     permissions:
       contents: write  # needed for pushing tags or creating releases
-      id-token: write  # needed for publish to pypi action
+    outputs:
+      should_publish: ${{ steps.set_output.outputs.should_publish }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -54,6 +50,9 @@ jobs:
       - name: Print version
         # This is the key step. By setting an id, we can read the output in later steps
         id: print-version
+        # We only want to run this step if we are on a pushed commit -- it will
+        # give an exit status of 1 if we are already on a version tag.
+        if: startsWith(github.ref, 'refs/heads/')
         # In order to be able to read the output in later steps, we need to
         # write something that looks like a variable definitionn to the
         # environment variable GITHUB_OUTPUT
@@ -61,12 +60,59 @@ jobs:
         # NOTE: This step doesn't check the statuscode of semv (non-zero if no new version)
 
       - uses: thejeff77/action-push-tag@v1.0.0
+        # Only run this step if this is a pushed commit and not a tag
+        if: startsWith(github.ref, 'refs/heads/')
         with:
           # Here we refer to the variable that we just wrote the the GITHUB_OUTPUT variable
           tag: ${{ steps.print-version.outputs.semv-out }}
           # NOTE: This step will fail if semv-out is empty (i.e. there was no
           # new version) and thus all following steps won't run either.
 
+      - name: Set output
+        id: set_output
+        # NOTE: We can unconditionally set should_publish=true here, because we
+        # wouldn't even reach this point if one of the previous points had
+        # failed.
+        run: echo "should_publish='true'" >> $GITHUB_OUTPUT
+
+  publish_version:
+    runs-on: ubuntu-latest
+    needs: [create-version-tag]
+    if: needs.create-version-tag.outputs.should_publish == 'true'
+    environment:
+      # These two are needed by the publish to pypi action
+      # https://github.com/marketplace/actions/pypi-publish
+      name: pypi
+      url: https://pypi.org/p/semv
+    permissions:
+      contents: write  # needed for pushing tags or creating releases
+      id-token: write  # needed for publish to pypi action
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # IMPORTANT: semv will look at our commit history
+          # we therefore need to fetch all commits, which is done here by
+          # setting fetch-depth to 0. See here for more details on the checkout action:
+          # https://github.com/actions/checkout
+          fetch-depth: 0
+
+      - name: Setup python 3.8
+        uses: actions/setup-python@v4
+        with:
+          # Why python3.8? It's the earliest python version that we support
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install tox
+          pip install -e .
+
+      - name: Setup git and list existing tags
+        run: |
+          git config user.name "ci"
+          git config user.email "ci"
+          git tag
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
       - name: Create github release
