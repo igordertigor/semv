@@ -74,7 +74,7 @@ jobs:
         # NOTE: We can unconditionally set should_publish=true here, because we
         # wouldn't even reach this point if one of the previous points had
         # failed.
-        run: echo "should_publish='true'" >> $GITHUB_OUTPUT
+        run: echo "set-output name=should_publish::true"
 
   publish_version:
     runs-on: ubuntu-latest
