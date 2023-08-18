@@ -11,10 +11,14 @@ on:
 jobs:
   create-version-tag:
     runs-on: ubuntu-latest
+    environment:
+      # These two are needed by the publish to pypi action
+      # https://github.com/marketplace/actions/pypi-publish
+      name: pypi
+      url: https://pypi.org/p/semv
     permissions:
       contents: write  # needed for pushing tags or creating releases
-    outputs:
-      should_publish: ${{ steps.set_output.outputs.should_publish }}
+      id-token: write  # needed for publish to pypi action
     steps:
       - uses: actions/checkout@v3
         with:
@@ -76,54 +80,25 @@ jobs:
         # failed.
         run: echo "set-output name=should_publish::true"
 
-  publish_version:
-    runs-on: ubuntu-latest
-    needs: [create-version-tag]
-    if: needs.create-version-tag.outputs.should_publish == 'true'
-    environment:
-      # These two are needed by the publish to pypi action
-      # https://github.com/marketplace/actions/pypi-publish
-      name: pypi
-      url: https://pypi.org/p/semv
-    permissions:
-      contents: write  # needed for pushing tags or creating releases
-      id-token: write  # needed for publish to pypi action
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          # IMPORTANT: semv will look at our commit history
-          # we therefore need to fetch all commits, which is done here by
-          # setting fetch-depth to 0. See here for more details on the checkout action:
-          # https://github.com/actions/checkout
-          fetch-depth: 0
-
-      - name: Setup python 3.8
-        uses: actions/setup-python@v4
-        with:
-          # Why python3.8? It's the earliest python version that we support
-          python-version: "3.8"
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install tox
-          pip install -e .
-
       - name: Setup git and list existing tags
         run: |
           git config user.name "ci"
           git config user.email "ci"
           git tag
+
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
       - name: Create github release
         uses: softprops/action-gh-release@v1
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         with:
           tag_name: ${{ steps.print-version.outputs.semv-out }}
           generate_release_notes: true   # autogenerate release notes while semv doesn't create change logs yet
 
       - name: Build package
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         run: tox -e build
 
       - name: Publish to pypi
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
