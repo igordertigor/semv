@@ -6,6 +6,7 @@ on:
   # release
   push:
     branches: ["master"]
+    tags: ["v*"]
 
 jobs:
   create-version-tag:
