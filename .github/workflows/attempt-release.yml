@@ -85,6 +85,7 @@ jobs:
           git config user.name "ci"
           git config user.email "ci"
           git tag
+          echo $${{ steps.set_output.outputs.should_publish }}
 
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
