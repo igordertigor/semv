@@ -33,7 +33,7 @@ You can configure semv via the `pyproject.toml` config file. Here are the defaul
 [tool.semv]
 invalid_commit_action = "warning"  # Could also be "error" or "skip"
 
-[tool.types]
+[tool.semv.types]
 feat = "minor"
 fix = "patch"
 perf = "patch"
