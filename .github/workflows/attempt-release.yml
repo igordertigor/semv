@@ -73,16 +73,33 @@ jobs:
           # NOTE: This step will fail if semv-out is empty (i.e. there was no
           # new version) and thus all following steps won't run either.
 
+      - name: Set output
+        id: set_output
+        # NOTE: We can unconditionally set should_publish=true here, because we
+        # wouldn't even reach this point if one of the previous points had
+        # failed.
+        run: echo "set-output name=should_publish::true"
+
+      - name: Setup git and list existing tags
+        run: |
+          git config user.name "ci"
+          git config user.email "ci"
+          git tag
+          echo $${{ steps.set_output.outputs.should_publish }}
+
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
       - name: Create github release
         uses: softprops/action-gh-release@v1
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         with:
           tag_name: ${{ steps.print-version.outputs.semv-out }}
           generate_release_notes: true   # autogenerate release notes while semv doesn't create change logs yet
 
       - name: Build package
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         run: tox -e build
 
       - name: Publish to pypi
+        if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
