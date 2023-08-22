@@ -13,18 +13,22 @@ As a result, running python semantic release can have quite a few unexpected sid
 I would prefer a tool that does the hard part of the automatic semantic versioning (parsing and validating commit messages) but doesn't have any side effects&mdash;the user should be free to use tags, variables, commits or whatever they like to represent new versions and the user should not be surprised by unexpected write operations.
 I therefore wrote semv, a read-only semantic version commit parsing and validation tool.
 
+
 ## Installation and usage
 
 You can install semv from pypi using
-
+```
   $ pip install semv
+```
 
 If you are inside a git repository, you can use semv to print the semantic version that the current commit *should* recieve. E.g.
-
+```
   $ semv
   v1.0.5 (no-eol)
+```
 
 Note that this will have not change anything about your repository. It is up to you to use the printed version. An example for using the printed version is given in semv's own [release workflow](https://github.com/igordertigor/semv/blob/master/.github/workflows/attempt-release.yml).
+
 
 ## Configuration
 
@@ -33,7 +37,7 @@ You can configure semv via the `pyproject.toml` config file. Here are the defaul
 [tool.semv]
 invalid_commit_action = "warning"  # Could also be "error" or "skip"
 
-[tool.types]
+[tool.semv.types]
 feat = "minor"
 fix = "patch"
 perf = "patch"
