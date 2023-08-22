@@ -16,13 +16,15 @@ I therefore wrote semv, a read-only semantic version commit parsing and validati
 ## Installation and usage
 
 You can install semv from pypi using
-
+```
   $ pip install semv
+```
 
 If you are inside a git repository, you can use semv to print the semantic version that the current commit *should* recieve. E.g.
-
+```
   $ semv
   v1.0.5 (no-eol)
+```
 
 Note that this will have not change anything about your repository. It is up to you to use the printed version. An example for using the printed version is given in semv's own [release workflow](https://github.com/igordertigor/semv/blob/master/.github/workflows/attempt-release.yml).
 
