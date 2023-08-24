@@ -20,7 +20,11 @@ invalid_commit_action = "warning"
 
 ### `types` (table)
 
-This configures which commit "types" semv will accept and how those will trigger a new version. By default, the "feat" type will trigger a minor release and "fix" and "perf" will trigger a patch release. Other valid types are "chore", "test", "docs", "ci", "refactor" and "style".
+This configures which commit "types" semv will accept and how
+those will trigger a new version. By default, the "feat" type
+will trigger a minor release and "fix" and "perf" will trigger
+a patch release. Other valid types are "chore", "test",
+"docs", "ci", "refactor" and "style".
 
 Example configuration setting the types:
 ```toml
@@ -29,4 +33,14 @@ feat = "minor"
 fix = "patch"
 perf = "patch"
 other = "valid"
+```
+
+### `checks` (table)
+
+This configures additional [validation checks](checks.md) that semv should run when determining the version. Checks are configured by providing the class name (e.g. `RunPreviousVersionsTestsTox`) followed by a table of arguments.
+
+Example configuration setting a check:
+```toml
+[tool.semv.checks]
+RunPreviousVersionsTestsTox = {testenv = "unit"}
 ```
