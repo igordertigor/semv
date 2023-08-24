@@ -13,5 +13,5 @@ version.
 
 This is currently only implemented for [tox](https://tox.wiki/en/latest/cli_interface.html#tox-run---installpkg):
 
-### semv.hooks.RunPreviousVersionsTestsTox
+### RunPreviousVersionsTestsTox
 ::: semv.hooks.RunPreviousVersionsTestsTox
