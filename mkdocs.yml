@@ -1,0 +1,12 @@
+site_name: SEMV
+theme: material
+repo_url: https://github.com/igordertigor/semv
+nav:
+  - index.md
+  - commit_parsing.md
+  - checks.md
+  - configuration.md
+plugins: 
+  - search
+  - mkdocstrings
+

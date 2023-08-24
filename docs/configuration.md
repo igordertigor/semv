@@ -1,0 +1,46 @@
+# Configuration
+
+You can configure semv using the `pyproject.toml` file via a section `[tool.semv]`.
+This page lists all possible configuration options along with their defaults.
+
+### `invalid_commit_action` (warning | error | skip)
+
+Action to take if encountering an invalid commit&mdash;typically a commit for which the commit message doesn't have the correct form.
+Possible values are
+
+- *warning*: Prints a warning to stderr when encountering an invalid commit.
+- *error*: Exit with return code 2 if encountering an invalid commit. Note that currently (Version v1.4.5), reverts and merge commits are considered invalid and would therefore result in an error.
+- *skip*: Silently skips invalid commits. This is a little dangerous as it may silently give an incorrect version. If you use this, it is recommended to use a [commit template](https://gist.github.com/lisawolderiksen/a7b99d94c92c6671181611be1641c733) like [this](https://github.com/igordertigor/semv/blob/master/.gitmessage) to ensure correct commit messages.
+
+Example configuration setting the invalid commit action:
+```toml
+[tool.semv]
+invalid_commit_action = "warning"
+```
+
+### `types` (table)
+
+This configures which commit "types" semv will accept and how
+those will trigger a new version. By default, the "feat" type
+will trigger a minor release and "fix" and "perf" will trigger
+a patch release. Other valid types are "chore", "test",
+"docs", "ci", "refactor" and "style".
+
+Example configuration setting the types:
+```toml
+[tool.semv.types]
+feat = "minor"
+fix = "patch"
+perf = "patch"
+other = "valid"
+```
+
+### `checks` (table)
+
+This configures additional [validation checks](checks.md) that semv should run when determining the version. Checks are configured by providing the class name (e.g. `RunPreviousVersionsTestsTox`) followed by a table of arguments.
+
+Example configuration setting a check:
+```toml
+[tool.semv.checks]
+RunPreviousVersionsTestsTox = {testenv = "unit"}
+```
