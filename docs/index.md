@@ -72,24 +72,59 @@ workflow](https://github.com/igordertigor/semv/blob/master/.github/workflows/att
 
 ## Understanding semantic versions
 
-tbd
+Semantic versions are version numbers that carry some basic information about
+the content of the corresponding release. Semv aims to help with automatically
+creating releases that have semantic versions. Specifically, semv will create
+the main segment of a semantic version identifier: vX.Y.Z, where X is usually
+referred to as the "major" version, Y is usually referred to as the "minor"
+version and Z is usually referred to as the "patch" version. We will stick to
+these names throughout this documentation because they are quite common.
 
-See [pep 440](https://peps.python.org/pep-0440/) for now.
+Having three separate version numbers isn't in itself necessarily useful. However, in semantic versioning, these three separate numbers indicate different kinds of releases:
+
+- A *major* release (i.e. one that increments the X component of the above
+  version numbers) is a release that breaks previously existing functionality.
+  In fact, this could be something as simple as removing a feature, but often it
+  will rather be a change in the software's user interface.
+- A *minor* release adds functionality. Typically, that would be a release that implements one or more new features.
+- Finally, a *patch* release would not change functionality but includes an improvement in existing functionality. That would typically be bug-fixes and performance improvements.
+
+Semantic versions are useful for consumers of a package: They can often
+specify a range of versions e.g. ">=v1.3.0" and "<v3.0.0" to indicate that
+they rely on a feature that was implemented in version v1.3.0 but they can't
+work with a functionality or interface that was removed in version v3.0.0.
+Note that this also signifies that they can live with the breaking change that
+was introduced in v2.0.0.
+
+Python's semantic versioning strategy further allows for qualifiers after the
+core version identifier that mark things like post-releases or release
+candidates. See [pep 440](https://peps.python.org/pep-0440/) for detail.
 
 
 ## Commit Parsing
 
-In order to automatically calculate the next version, semv parses commit messages (and potentially performs additional steps).
-That means that commit messages should be [formatted in a particular
-way](commit_parsing.md): Each commit message should start with a line of the form `type(scope): <short description>`, where `type` would be a commit type like "feat" or "fix" and "scope" would be the thing that was actually changed. For example, the commit message "feat(parsing): Parsing can now handle foo as well" would describe a commit that adds a new feature to the parsing component of your application. At the moment (v1.4.5), semv doesn't parse the scope.
+In order to automatically calculate the next version, semv parses commit
+messages (and potentially performs additional steps). That means that commit
+messages should be [formatted in a particular way](commit_parsing.md): Each
+commit message should start with a line of the form `type(scope): <short
+description>`, where `type` would be a commit type like "feat" or "fix" and
+"scope" would be the thing that was actually changed. For example, the commit
+message "feat(parsing): Parsing can now handle foo as well" would describe a
+commit that adds a new feature to the parsing component of your application.
+At the moment (v1.4.5), semv doesn't parse the scope.
 
-Below the first line, users can add a body (as is good practice with commit messages in general). The body should be separated from the title by an empty line. In order to detect breaking changes, semv will expect the body to start with `BREAKING CHANGE: ` if the commit contains a breaking change.
+Below the first line, users can add a body (as is good practice with commit
+messages in general). The body should be separated from the title by an empty
+line. In order to detect breaking changes, semv will expect the body to start
+with `BREAKING CHANGE: ` if the commit contains a breaking change.
 
-In addition to commit parsing, semv can be [configured](configuration.md) to also run additional checks to&mdash;for example&mdash;detect some forms of breaking changes automatically.
+In addition to commit parsing, semv can be [configured](configuration.md) to
+also run additional checks to&mdash;for example&mdash;detect some forms of
+breaking changes automatically.
 
 
 ## Configuration
 
-In general, semv should have reasonable defaults.
-However, you can configure semv via the `pyproject.toml` config file.
-Details of the configuration options are [here](configuration.md).
+In general, semv should have reasonable defaults. However, you can configure
+semv via the `pyproject.toml` config file. Details of the configuration
+options are [here](configuration.md).
