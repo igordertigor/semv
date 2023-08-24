@@ -6,3 +6,7 @@ nav:
   - commit_parsing.md
   - checks.md
   - configuration.md
+plugins: 
+  - search
+  - mkdocstrings
+
