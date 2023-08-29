@@ -1,5 +1,6 @@
 from typing import Iterator
 import json
+import re
 import subprocess
 from .interface import Version, VersionControlSystem, RawCommit
 
@@ -34,4 +35,17 @@ class Git(VersionControlSystem):
         ).decode('utf-8')
         for json_commit in commits.split('\n\n'):
             if len(json_commit):
-                yield RawCommit(**json.loads(json_commit.replace('\n', ' ')))
+                yield sanitize_commit_json(json_commit)
+
+
+def sanitize_commit_json(text: str) -> RawCommit:
+    pattern = r'\{"sha": "(?P<sha>.*)", "title": "(?P<title>.*)", "body": "(?P<body>.*)"\}'
+    m = re.search(pattern, text, re.DOTALL)
+    if m:
+        commit_dict = m.groupdict()
+    else:
+        # Fallback
+        commit_dict = json.loads(text.replace('\n', ' '))
+    return RawCommit(
+        **{key: value.strip() for key, value in commit_dict.items()}
+    )

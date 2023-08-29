@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from tempfile import TemporaryDirectory
 import subprocess
 from semv.interface import Version
-from semv.version_control_system import Git
+from semv.version_control_system import Git, sanitize_commit_json, RawCommit
 
 
 @pytest.fixture
@@ -59,6 +59,32 @@ class TestCommitsWithout:
             commits = g.get_commits_without(Version(major=1, minor=0, patch=0))
             titles = set(c.title for c in commits)
             assert titles == {'Third commit', 'Fourth commit'}
+
+
+class TestSanitizeJsonCommit:
+    def test_sane_commit_message(self):
+        rc = sanitize_commit_json(
+            '{"sha": "d938a11", "title": "test(unit): testing", "body": ""}'
+        )
+        assert rc == RawCommit(
+            sha='d938a11', title='test(unit): testing', body=''
+        )
+
+    def test_line_break_at_end_of_body(self):
+        rc = sanitize_commit_json(
+            '{"sha": "d938a11", "title": "test(unit): testing", "body": "some text\n"}'
+        )
+        assert rc == RawCommit(
+            sha='d938a11', title='test(unit): testing', body='some text'
+        )
+
+    def test_double_quotes_in_title(self):
+        rc = sanitize_commit_json(
+            '{"sha": "d938a11", "title": "Reverts commit "test(unit): testing"", "body": ""}'
+        )
+        assert rc == RawCommit(
+            sha='d938a11', title='Reverts commit "test(unit): testing"', body=''
+        )
 
 
 class Repo:
