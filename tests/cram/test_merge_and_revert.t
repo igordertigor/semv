@@ -51,7 +51,7 @@ Next, create a branch and merge it
   Switched to branch 'master'
 Merge with --no-ff to force a merge commit
   $ git merge --no-ff feature/test-merge-commit
-  Merge made by the 'recursive' strategy.
+  Merge made by the '*' strategy. (glob)
    README.md | 1 +
    1 file changed, 1 insertion(+)
   $ git log HEAD~..HEAD
