@@ -21,7 +21,10 @@ def version_string(config: Config) -> Version:
         SuspiciousVersionIncrement
     """
     vcs = Git()
-    cp = AngularCommitParser(config.invalid_commit_action)
+    cp = AngularCommitParser(
+        config.invalid_commit_action,
+        config.skip_commit_patterns,
+    )
     vi = DefaultIncrementer(
         config.commit_types_minor,
         config.commit_types_patch,
