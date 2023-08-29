@@ -22,7 +22,9 @@ class Config:
         }
     )
     invalid_commit_action: InvalidCommitAction = InvalidCommitAction.warning
-    skip_commit_patterns: Set[str] = field(default_factory=set)
+    skip_commit_patterns: Set[str] = field(
+        default_factory=lambda: {'^Merge.*', '^Revert.*'}
+    )
     checks: Dict[str, Dict[str, Any]] = field(default_factory=dict)
 
     @classmethod

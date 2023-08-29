@@ -58,5 +58,4 @@ Fix merge commit
   On branch master
   nothing to commit, working tree clean
   $ semv
-  WARNING: Invalid commit: * Merge branch (glob)
   v0.1.0 (no-eol)
