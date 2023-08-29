@@ -34,4 +34,9 @@ class Git(VersionControlSystem):
         ).decode('utf-8')
         for json_commit in commits.split('\n\n'):
             if len(json_commit):
-                yield RawCommit(**json.loads(json_commit.replace('\n', ' ')))
+                yield sanitize_commit_json(json_commit)
+
+
+
+def sanitize_commit_json(text: str) -> RawCommit:
+    return RawCommit(**json.loads(text.replace('\n', ' ')))
