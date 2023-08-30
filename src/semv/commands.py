@@ -59,4 +59,13 @@ def commit_msg(filename: str, config: Config):
     commit_parser = AngularCommitParser(
         InvalidCommitAction.error, config.skip_commit_patterns
     )
-    commit_parser.parse(RawCommit(sha='', title=msg.strip(), body=''))
+    version_incrementer = DefaultIncrementer(
+        config.commit_types_minor,
+        config.commit_types_patch,
+        config.commit_types_skip,
+        InvalidCommitAction.error,
+    )
+    parsed_commit = commit_parser.parse(
+        RawCommit(sha='', title=msg.strip(), body='')
+    )
+    version_incrementer.get_version_increment([parsed_commit])
