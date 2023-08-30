@@ -9,3 +9,8 @@ You can run semv as a commit-msg hook:
   $ git commit -m 'invalid message'
   ERROR: Invalid commit:  invalid message
   [1]
+
+This should also not work
+  $ git commit -m 'wrong(scope): some message'
+  ERROR: Commit  has invalid type wrong
+  [1]
