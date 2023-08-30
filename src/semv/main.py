@@ -17,7 +17,10 @@ def main():
         sys.exit(0)
 
     try:
-        print(commands.version_string(config), end='')
+        if len(sys.argv) == 1:
+            print(commands.version_string(config), end='')
+        elif len(sys.argv) == 3 and sys.argv[1] == '--commit-msg':
+            commands.commit_msg(sys.argv[2], config)
     except errors.NoNewVersion:
         sys.stderr.write('WARNING: No changes for new version\n')
         sys.exit(1)

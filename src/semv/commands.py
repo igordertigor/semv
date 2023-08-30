@@ -3,7 +3,7 @@ from .parse import AngularCommitParser
 from .version_control_system import Git
 from .config import Config
 from . import errors
-from .types import Version, VersionIncrement
+from .types import Version, VersionIncrement, RawCommit, InvalidCommitAction
 from . import hooks
 
 
@@ -50,3 +50,22 @@ def version_string(config: Config) -> Version:
     if inc == VersionIncrement.skip:
         raise errors.NoNewVersion
     return current_version + inc
+
+
+def commit_msg(filename: str, config: Config):
+    """Check a single commit message"""
+    with open(filename, 'r') as f:
+        msg = f.read()
+    commit_parser = AngularCommitParser(
+        InvalidCommitAction.error, config.skip_commit_patterns
+    )
+    version_incrementer = DefaultIncrementer(
+        config.commit_types_minor,
+        config.commit_types_patch,
+        config.commit_types_skip,
+        InvalidCommitAction.error,
+    )
+    parsed_commit = commit_parser.parse(
+        RawCommit(sha='', title=msg.strip(), body='')
+    )
+    version_incrementer.get_version_increment([parsed_commit])

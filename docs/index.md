@@ -59,6 +59,7 @@ version that the current commit *should* receive. E.g.
   $ semv
   v1.0.5 (no-eol)
 ```
+Here, and anywhere else in this documentation, the `$`-sign indicates an interactive command line prompt and doesn't need to be typed.
 The `(no-eol)` tag will not be shown and is only intended to indicate that semv will not print a newline character. That means that you could use semv to create a version tag like this:
 ```
   $ git tag $(semv)
@@ -68,6 +69,10 @@ Note that semv itself will have not change anything about your repository. It is
 you to use the printed version. An example for using the printed version is
 given in semv's own [release
 workflow](https://github.com/igordertigor/semv/blob/master/.github/workflows/attempt-release.yml).
+
+Other usage patterns can be found in [alternative usage](alternative-usage.md),
+for example using semv as a `commit-msg` hook to check commits before
+committing them to version control.
 
 
 ## Understanding semantic versions
