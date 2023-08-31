@@ -25,3 +25,9 @@ class TestAngularCommitParser:
         assert p.parse(
             RawCommit(sha='any sha', title='feat(any-scope): Message', body='')
         ) == Commit(sha='any sha', type='feat', scope='any-scope', breaking=False)
+
+    def test_no_scope(self):
+        p = AngularCommitParser()
+        assert p.parse(
+            RawCommit(sha='any sha', title='feat: No scope', body='')
+        ) == Commit(sha='any sha', type='feat', scope=':global:', breaking=False)
