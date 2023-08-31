@@ -48,6 +48,6 @@ Now let's add a commit that has an invalid message
   v0.0.0
   v0.1.0
   $ semv
-  WARNING: Invalid commit: * readme: Add some more info about our tool (glob)
+  WARNING: Commit * has invalid type readme (glob)
   WARNING: No changes for new version
   [1]
