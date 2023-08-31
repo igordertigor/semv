@@ -68,4 +68,5 @@ def commit_msg(filename: str, config: Config):
     parsed_commit = commit_parser.parse(
         RawCommit(sha='', title=msg.strip(), body='')
     )
-    version_incrementer.get_version_increment([parsed_commit])
+    if parsed_commit is not None:
+        version_incrementer.get_version_increment(iter([parsed_commit]))
