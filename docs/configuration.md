@@ -31,6 +31,17 @@ merge` and `git revert` commits, these patterns may not be valid for pull reques
 skip_commit_patterns = ["^Merge.*", "^Revert.*"]
 ```
 
+### `valid_scopes` (array of strings)
+
+If this is set, it is a list of valid scopes. Irrespective of this setting, omitting the scope is still possible. If `valid_scopes` is set, commits that use an invalid scope will result in the `invalid_commit_action` (see above).
+
+Example configuration setting valid scopes:
+
+```toml
+[tool.semv]
+valid_scopes = ["parser", "ui", "backend"]
+```
+
 ### `types` (table)
 
 This configures which commit "types" semv will accept and how
