@@ -14,7 +14,7 @@ class AngularCommitParser(CommitParser):
         valid_scopes: Union[Set[str], Literal[':anyscope:']] = ':anyscope:',
     ):
         self.type_and_scope_pattern = re.compile(
-            r'(?P<type>\w+)\(?(?P<scope>[a-zA-Z-_]*)\)?: .*'
+            r'(?P<type>\w+)\(?(?P<scope>[a-zA-Z-_]*)\)?: (?P<summary>.*)'
         )
         self.breaking_pattern = re.compile(
             r'BREAKING CHANGE: .*', flags=re.DOTALL
@@ -61,7 +61,13 @@ class AngularCommitParser(CommitParser):
                     )
             else:
                 scope = ':global:'
-        return Commit(sha=sha, type=type, scope=scope, breaking=breaking)
+        return Commit(
+            sha=sha,
+            type=type,
+            scope=scope,
+            breaking=breaking,
+            summary=m.group('summary'),
+        )
 
     def should_skip_by_pattern(self, title: str) -> bool:
         for pattern in self.skip_commit_patterns:
