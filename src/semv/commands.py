@@ -1,3 +1,5 @@
+from typing import Dict, List
+from itertools import groupby
 from .increment import DefaultIncrementer
 from .parse import AngularCommitParser
 from .version_control_system import Git
@@ -71,3 +73,21 @@ def commit_msg(filename: str, config: Config):
     )
     if parsed_commit is not None:
         version_incrementer.get_version_increment(iter([parsed_commit]))
+
+
+def changelog(config: Config):
+    vcs = Git()
+    cp = AngularCommitParser(
+        config.invalid_commit_action,
+        config.skip_commit_patterns,
+        valid_scopes=config.valid_scopes,
+    )
+    current_version = vcs.get_current_version()
+    commits_or_none = (
+        cp.parse(c) for c in vcs.get_commits_without(current_version)
+    )
+    commits = [c for c in commits_or_none if c is not None]
+    messages: Dict[str, List[str]] = {}
+    for type_name, comm in groupby(commits, key=lambda c: c.type):
+        messages[type_name] = list(comm)
+    print(messages)
