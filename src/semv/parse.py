@@ -49,15 +49,18 @@ class AngularCommitParser(CommitParser):
     ) -> Commit:
         type = m.group('type')
         scope = m.group('scope')
-        if scope and self.valid_scopes != ':anyscope:':
-            if scope not in self.valid_scopes:
-                warn_or_raise(
-                    f'Invalid commit scope: {sha} {title}',
-                    self.invalid_commit_action,
-                    errors.InvalidCommitFormat,
-                )
+        if self.valid_scopes == ':anyscope:':
+            scope = scope or ':global:'
         else:
-            scope = ':global:'
+            if scope:
+                if scope not in self.valid_scopes:
+                    warn_or_raise(
+                        f'Invalid commit scope: {sha} {title}',
+                        self.invalid_commit_action,
+                        errors.InvalidCommitFormat,
+                    )
+            else:
+                scope = ':global:'
         return Commit(sha=sha, type=type, scope=scope, breaking=breaking)
 
     def should_skip_by_pattern(self, title: str) -> bool:
