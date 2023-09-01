@@ -24,6 +24,7 @@ def version_string(config: Config) -> Version:
     cp = AngularCommitParser(
         config.invalid_commit_action,
         config.skip_commit_patterns,
+        valid_scopes=config.valid_scopes,
     )
     vi = DefaultIncrementer(
         config.commit_types_minor,

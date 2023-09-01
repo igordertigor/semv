@@ -1,4 +1,4 @@
-from typing import Dict, Any, Set, List
+from typing import Dict, Any, Set, List, Union, Literal
 import tomli
 from dataclasses import dataclass, field
 from .types import InvalidCommitAction
@@ -21,6 +21,7 @@ class Config:
             'style',
         }
     )
+    valid_scopes: Union[Set[str], Literal[':anyscope:']] = ':anyscope:'
     invalid_commit_action: InvalidCommitAction = InvalidCommitAction.warning
     skip_commit_patterns: Set[str] = field(
         default_factory=lambda: {'^Merge.*', '^Revert.*'}
@@ -34,6 +35,8 @@ class Config:
             cfg['invalid_commit_action'] = InvalidCommitAction(
                 cfg['invalid_commit_action']
             )
+        if 'valid_scopes' in cfg:
+            cfg['valid_scopes'] = set(cfg['valid_scopes'])
         if 'types' in cfg:
             types_cfg = cls._reorganize_types(cfg.pop('types'))
         else:
