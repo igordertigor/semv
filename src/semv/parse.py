@@ -13,7 +13,7 @@ class AngularCommitParser(CommitParser):
         skip_commit_patterns: Set[str] = set(),
     ):
         self.type_and_scope_pattern = re.compile(
-            r'(?P<type>\w+)\((?P<scope>[a-zA-Z-_]+)\): .*'
+            r'(?P<type>\w+)\(?(?P<scope>[a-zA-Z-_]*)\)?: .*'
         )
         self.breaking_pattern = re.compile(
             r'BREAKING CHANGE: .*', flags=re.DOTALL
@@ -42,7 +42,7 @@ class AngularCommitParser(CommitParser):
     @staticmethod
     def _prepare_commit(m: re.Match, sha: str, breaking: bool) -> Commit:
         type = m.group('type')
-        scope = m.group('scope')
+        scope = m.group('scope') or ':global:'
         return Commit(sha=sha, type=type, scope=scope, breaking=breaking)
 
     def should_skip_by_pattern(self, title: str) -> bool:
