@@ -51,7 +51,13 @@ class Changelog:
                 if general:
                     lines.extend(f'- General: {c.summary}' for c in general)
                 for scope, cmts in type_commits.items():
-                    lines.extend(f'- {c.scope}: {c.summary}' for c in cmts)
+                    if len(cmts) == 1:
+                        lines.extend(f'- {c.scope}: {c.summary}' for c in cmts)
+                    elif len(cmts) > 1:
+                        lines.append(f'- {scope}:')
+                        for c in cmts:
+                            lines.append(f'  - {c.summary}')
+
         return '\n'.join(lines)
 
     def translate_types(self, name: str) -> str:

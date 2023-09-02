@@ -87,7 +87,7 @@ def changelog(config: Config):
     commits_or_none = (
         cp.parse(c) for c in vcs.get_commits_without(current_version)
     )
-    commits = [c for c in commits_or_none if c is not None]
+    commits = reversed([c for c in commits_or_none if c is not None])
     cngl = Changelog()
     grouped_commits = cngl.group_commits(commits)
     messages = []

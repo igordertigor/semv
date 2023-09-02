@@ -65,3 +65,26 @@ Add breaking change
   
   # Fixes
   - myscript: fix typo
+  $ echo "def greet(name) -> str:" > myscript.py
+  $ echo "    'Print greeting message'" >> myscript.py
+  $ echo "    print(f'Hello {name}!')" >> myscript.py
+  $ echo "" >> myscript.py
+  $ echo "if __name__ == '__main__':" >> myscript.py
+  $ echo "    greet('world')" >> myscript.py
+  $ git add myscript.py
+  $ git commit -m 'feat(myscript): Add docstring'
+  [master *] feat(myscript): Add docstring (glob)
+   1 file changed, 1 insertion(+)
+  $ semv --changelog
+  # Breaking changes
+  - myscript: Need name
+    - Need to pass a name to greet now
+  
+  # New features
+  - General: Convert to api
+  - myscript:
+    - Improved message
+    - Add docstring
+  
+  # Fixes
+  - myscript: fix typo
