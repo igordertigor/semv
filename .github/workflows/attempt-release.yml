@@ -65,6 +65,11 @@ jobs:
         run: echo "semv-out=$(semv)" >> $GITHUB_OUTPUT
         # NOTE: This step doesn't check the statuscode of semv (non-zero if no new version)
 
+      - name: Create changelog
+        run: |
+          semv --changelog > ${{ github.workspace }}-CHANGELOG.md
+          cat ${{ github.workspace }}-CHANGELOG.md
+
       - uses: thejeff77/action-push-tag@v1.0.0
         # Only run this step if this is a pushed commit and not a tag
         if: startsWith(github.ref, 'refs/heads/')
@@ -87,9 +92,6 @@ jobs:
           git config user.email "ci"
           git tag
           echo $${{ steps.set_output.outputs.should_publish }}
-
-      - name: Create changelog
-        run: semv --changelog > ${{ github.workspace }}-CHANGELOG.md
 
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
