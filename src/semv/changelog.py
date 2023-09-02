@@ -8,13 +8,9 @@ GroupedCommits = Dict[str, Dict[str, List[Commit]]]
 
 
 class Changelog:
-    def group_commits(
-        self, commits: List[Commit]
-    ) -> GroupedCommits:
+    def group_commits(self, commits: List[Commit]) -> GroupedCommits:
 
-        out: GroupedCommits = defaultdict(
-            lambda: defaultdict(list)
-        )
+        out: GroupedCommits = defaultdict(lambda: defaultdict(list))
         for commit in commits:
             if commit.breaking:
                 out['breaking'][commit.scope].append(commit)
@@ -22,7 +18,9 @@ class Changelog:
                 out[commit.type][commit.scope].append(commit)
         return out
 
-    def format_breaking(self, breaking_commits: Dict[str, List[Commit]]) -> str:
+    def format_breaking(
+        self, breaking_commits: Dict[str, List[Commit]]
+    ) -> str:
         lines: List[str] = []
         if breaking_commits:
             lines.append('# Breaking changes')

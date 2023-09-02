@@ -26,7 +26,6 @@ class Commit:
     breaking_summaries: List[str] = field(default_factory=list)
 
 
-
 class VersionIncrement(str, Enum):
     # NOTE: The values here are alphabetically sorted. This is used downstream
     skip = 'skip'
