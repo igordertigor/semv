@@ -37,7 +37,9 @@ class Changelog:
                     lines.append(f'  - {summary}')
         return '\n'.join(lines)
 
-    def format_commits(self, types: Iterator[str], commits: GroupedCommits) -> str:
+    def format_commits(
+        self, types: Iterator[str], commits: GroupedCommits
+    ) -> str:
         lines: List[str] = []
         for type_name in types:
             type_commits = commits.pop(type_name, None)
