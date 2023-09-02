@@ -96,7 +96,7 @@ def changelog(config: Config):
         messages.append(cngl.format_breaking(breaking))
 
     messages += [
-        cngl.format_commits(types, grouped_commits)
+        cngl.format_commits(iter(types), grouped_commits)
         for types in [
             config.commit_types_major,
             config.commit_types_minor,

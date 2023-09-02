@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Iterator
 from collections import defaultdict
 
 from .types import Commit
@@ -8,7 +8,7 @@ GroupedCommits = Dict[str, Dict[str, List[Commit]]]
 
 
 class Changelog:
-    def group_commits(self, commits: List[Commit]) -> GroupedCommits:
+    def group_commits(self, commits: Iterator[Commit]) -> GroupedCommits:
 
         out: GroupedCommits = defaultdict(lambda: defaultdict(list))
         for commit in commits:
@@ -37,7 +37,7 @@ class Changelog:
                     lines.append(f'  - {summary}')
         return '\n'.join(lines)
 
-    def format_commits(self, types: List[str], commits: GroupedCommits) -> str:
+    def format_commits(self, types: Iterator[str], commits: GroupedCommits) -> str:
         lines: List[str] = []
         for type_name in types:
             type_commits = commits.pop(type_name, None)
