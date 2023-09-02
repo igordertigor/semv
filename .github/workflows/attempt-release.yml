@@ -88,6 +88,9 @@ jobs:
           git tag
           echo $${{ steps.set_output.outputs.should_publish }}
 
+      - name: Create changelog
+        run: semv --changelog > ${{ github.workspace }}-CHANGELOG.md
+
       # The following steps should be more or less standard python package publishing
       # Feel free to omit the github release.
       - name: Create github release
@@ -95,7 +98,8 @@ jobs:
         if: ${{ steps.set_output.outputs.should_publish }} == 'true'
         with:
           tag_name: ${{ steps.print-version.outputs.semv-out }}
-          generate_release_notes: true   # autogenerate release notes while semv doesn't create change logs yet
+          body_path: ${{ github.workspace }}-CHANGELOG.md
+          generate_release_notes: false   # do not generate release notes, we generated them with semv
 
       - name: Build package
         if: ${{ steps.set_output.outputs.should_publish }} == 'true'

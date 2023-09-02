@@ -116,7 +116,8 @@ description>`, where `type` would be a commit type like "feat" or "fix" and
 "scope" would be the thing that was actually changed. For example, the commit
 message "feat(parsing): Parsing can now handle foo as well" would describe a
 commit that adds a new feature to the parsing component of your application.
-At the moment (v1.4.5), semv doesn't parse the scope.
+Starting with version v2.4.0, semv will use the scope for the new [changelog
+feature](alternative-usage.md).
 
 Below the first line, users can add a body (as is good practice with commit
 messages in general). The body should be separated from the title by an empty

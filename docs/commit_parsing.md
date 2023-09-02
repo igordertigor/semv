@@ -35,10 +35,13 @@ types *will not trigger a new version*.
 
 ## The `scope` keyword
 
-Is parsed but not used at the moment (version v2.2.0).
+Is parsed but not used for determining the new version. However, starting with
+v2.4.0, semv offers a [changelog feature](alternative-usage) which does use the
+scope.
 
-*New*: Starting with version v2.2.0, you can now omit the scope. As a result, a
-commit message like "fix: General overhaul" is now valid.
+Starting with version v2.2.0, you can now omit the scope. As a result, a
+commit message like "fix: General overhaul" is now valid and will be treated as
+applying generally in the changelog (starting from v2.4.0).
 
 ## The `body` and `footer`
 

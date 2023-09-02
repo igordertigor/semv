@@ -1,4 +1,5 @@
-from dataclasses import dataclass, replace
+from typing import List
+from dataclasses import dataclass, replace, field
 from enum import Enum
 
 
@@ -21,6 +22,8 @@ class Commit:
     type: str
     scope: str
     breaking: bool
+    summary: str = ''
+    breaking_summaries: List[str] = field(default_factory=list)
 
 
 class VersionIncrement(str, Enum):

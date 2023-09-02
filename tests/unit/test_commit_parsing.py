@@ -9,7 +9,13 @@ class TestAngularCommitParser:
         p = AngularCommitParser()
         assert p.parse(
             RawCommit(sha='any sha', title='feat(scope): Message', body='')
-        ) == Commit(sha='any sha', type='feat', scope='scope', breaking=False)
+        ) == Commit(
+            sha='any sha',
+            type='feat',
+            scope='scope',
+            breaking=False,
+            summary='Message',
+        )
 
     def test_breaking(self):
         p = AngularCommitParser()
@@ -19,14 +25,25 @@ class TestAngularCommitParser:
                 title='feat(scope): Message',
                 body='BREAKING CHANGE: bla bla',
             )
-        ) == Commit(sha='any sha', type='feat', scope='scope', breaking=True)
+        ) == Commit(
+            sha='any sha',
+            type='feat',
+            scope='scope',
+            breaking=True,
+            summary='Message',
+            breaking_summaries=['bla bla'],
+        )
 
     def test_scope_may_include_underscore(self):
         p = AngularCommitParser()
         assert p.parse(
             RawCommit(sha='any sha', title='feat(any_scope): Message', body='')
         ) == Commit(
-            sha='any sha', type='feat', scope='any_scope', breaking=False
+            sha='any sha',
+            type='feat',
+            scope='any_scope',
+            breaking=False,
+            summary='Message',
         )
 
     def test_scope_may_include_dash(self):
@@ -34,7 +51,11 @@ class TestAngularCommitParser:
         assert p.parse(
             RawCommit(sha='any sha', title='feat(any-scope): Message', body='')
         ) == Commit(
-            sha='any sha', type='feat', scope='any-scope', breaking=False
+            sha='any sha',
+            type='feat',
+            scope='any-scope',
+            breaking=False,
+            summary='Message',
         )
 
     def test_no_scope(self):
@@ -42,7 +63,11 @@ class TestAngularCommitParser:
         assert p.parse(
             RawCommit(sha='any sha', title='feat: No scope', body='')
         ) == Commit(
-            sha='any sha', type='feat', scope=':global:', breaking=False
+            sha='any sha',
+            type='feat',
+            scope=':global:',
+            breaking=False,
+            summary='No scope',
         )
 
     def test_break_scope_with_no_parens(self):

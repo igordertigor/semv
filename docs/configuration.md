@@ -9,7 +9,7 @@ Action to take if encountering an invalid commit&mdash;typically a commit for wh
 Possible values are
 
 - *warning*: Prints a warning to stderr when encountering an invalid commit.
-- *error*: Exit with return code 2 if encountering an invalid commit. Note that currently (Version v1.4.5), reverts and merge commits are considered invalid and would therefore result in an error.
+- *error*: Exit with return code 2 if encountering an invalid commit.
 - *skip*: Silently skips invalid commits. This is a little dangerous as it may silently give an incorrect version. If you use this, it is recommended to use a [commit template](https://gist.github.com/lisawolderiksen/a7b99d94c92c6671181611be1641c733) like [this](https://github.com/igordertigor/semv/blob/master/.gitmessage) to ensure correct commit messages.
 
 Example configuration setting the invalid commit action:

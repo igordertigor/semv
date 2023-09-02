@@ -1,4 +1,4 @@
-from typing import Optional, Set, Literal, Union
+from typing import Optional, Set, Literal, Union, List
 import re
 from .interface import RawCommit, Commit, CommitParser
 from . import errors
@@ -14,10 +14,10 @@ class AngularCommitParser(CommitParser):
         valid_scopes: Union[Set[str], Literal[':anyscope:']] = ':anyscope:',
     ):
         self.type_and_scope_pattern = re.compile(
-            r'(?P<type>\w+)\(?(?P<scope>[a-zA-Z-_]*)\)?: .*'
+            r'(?P<type>\w+)\(?(?P<scope>[a-zA-Z-_]*)\)?: (?P<summary>.*)'
         )
         self.breaking_pattern = re.compile(
-            r'BREAKING CHANGE: .*', flags=re.DOTALL
+            r'BREAKING CHANGE: (?P<summary>.*)', flags=re.DOTALL
         )
         self.invalid_commit_action = invalid_commit_action
         self.valid_scopes = valid_scopes
@@ -37,15 +37,17 @@ class AngularCommitParser(CommitParser):
             )
             return None
 
+        mb = self.breaking_pattern.findall(commit.body)
+
         return self._prepare_commit(
             m,
+            mb,
             commit.sha,
-            bool(self.breaking_pattern.match(commit.body)),
             commit.title,
         )
 
     def _prepare_commit(
-        self, m: re.Match, sha: str, breaking: bool, title: str
+        self, m: re.Match, mb: List[str], sha: str, title: str
     ) -> Commit:
         type = m.group('type')
         scope = m.group('scope')
@@ -61,7 +63,14 @@ class AngularCommitParser(CommitParser):
                     )
             else:
                 scope = ':global:'
-        return Commit(sha=sha, type=type, scope=scope, breaking=breaking)
+        return Commit(
+            sha=sha,
+            type=type,
+            scope=scope,
+            breaking=bool(mb),
+            summary=m.group('summary'),
+            breaking_summaries=mb,
+        )
 
     def should_skip_by_pattern(self, title: str) -> bool:
         for pattern in self.skip_commit_patterns:
