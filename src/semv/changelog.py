@@ -24,20 +24,27 @@ class Changelog:
         lines: List[str] = []
         if breaking_commits:
             lines.append('# Breaking changes')
+
         general = breaking_commits.pop(':global:', None)
         if general:
             for c in general:
-                lines.append(f'- {c.summary}')
-                for summary in c.breaking_summaries:
-                    lines.append(f'  - {summary}')
+                lines.extend(self.format_breaking_commit('', c))
+
         for scope, commits in breaking_commits.items():
             for c in commits:
-                lines.append(f'- {scope}: {c.summary}')
-                for summary in c.breaking_summaries:
-                    lines.append(f'  - {summary}')
+                lines.extend(self.format_breaking_commit(scope, c))
         return '\n'.join(lines)
 
-    def format_commits(
+    def format_breaking_commit(self, scope: str, commit: Commit) -> List[str]:
+        if scope:
+            out = [f'- {scope}: {commit.summary}']
+        else:
+            out = [f'- {commit.summary}']
+        for summary in commit.breaking_summaries:
+            out.append(f'  - {summary}')
+        return out
+
+    def format_release_commits(
         self, types: Iterator[str], commits: GroupedCommits
     ) -> str:
         lines: List[str] = []
@@ -47,18 +54,23 @@ class Changelog:
                 lines.append(f'# {self.translate_types(type_name)}')
 
             if type_commits:
+
                 general = type_commits.pop(':global:', None)
                 if general:
-                    lines.extend(f'- General: {c.summary}' for c in general)
+                    lines.extend(self.format_scope('General', general))
+
                 for scope, cmts in type_commits.items():
-                    if len(cmts) == 1:
-                        lines.extend(f'- {c.scope}: {c.summary}' for c in cmts)
-                    elif len(cmts) > 1:
-                        lines.append(f'- {scope}:')
-                        for c in cmts:
-                            lines.append(f'  - {c.summary}')
+                    lines.extend(self.format_scope(scope, cmts))
 
         return '\n'.join(lines)
+
+    def format_scope(self, scope: str, commits: List[Commit]) -> List[str]:
+        if len(commits) == 1:
+            return [f'- {scope}: {commits[0].summary}']
+        elif len(commits) > 1:
+            return [f'- {scope}:'] + [f'  - {c.summary}' for c in commits]
+        else:
+            return []
 
     def translate_types(self, name: str) -> str:
         translations = {
