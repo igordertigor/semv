@@ -7,7 +7,7 @@ from .config import Config
 from . import errors
 from .types import Version, VersionIncrement, RawCommit, InvalidCommitAction
 from . import hooks
-from .changelog import Changelog
+from .changelog import ChangelogAssembler
 
 
 def list_types(config: Config) -> str:
@@ -88,19 +88,10 @@ def changelog(config: Config):
         cp.parse(c) for c in vcs.get_commits_without(current_version)
     )
     commits = reversed([c for c in commits_or_none if c is not None])
-    cngl = Changelog()
-    grouped_commits = cngl.group_commits(commits)
-    messages = []
-    breaking = grouped_commits.pop('breaking', None)
-    if breaking:
-        messages.append(cngl.format_breaking(breaking))
-
-    messages += [
-        cngl.format_release_commits(iter(types), grouped_commits)
-        for types in [
-            config.commit_types_major,
-            config.commit_types_minor,
-            config.commit_types_patch,
-        ]
-    ]
-    print('\n\n'.join(m for m in messages if m))
+    cl_assembler = ChangelogAssembler(
+        config.commit_types_major,
+        config.commit_types_minor,
+        config.commit_types_patch,
+    )
+    changelog = cl_assembler.assemble(commits)
+    print(changelog)
