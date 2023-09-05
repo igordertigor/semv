@@ -56,5 +56,12 @@ Is much nicer than this changelog:
 ```
 In fact, they both refer to the same commit history.
 
+Starting with v2.5.0, changelogs can be exported in two different formats:
+1. *pretty*: This is what you get if you just use the `--changelog` option. You
+   can also select it explicitly by setting `--changelog=pretty`. The examples
+   above also use this format.
+2. *json*: Can be selected by setting `--changelog=json` and will result in a
+   json-formatted changelog.
+
 Note: You can rewrite past commits using `git rebase -i` *if you haven't pushed
 them to a remote yet or if you can force-push to the remote*.
