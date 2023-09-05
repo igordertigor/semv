@@ -1,11 +1,19 @@
-from typing import Dict, List
-from itertools import groupby
+from typing import Dict
+import json
+from dataclasses import asdict
+
 from .increment import DefaultIncrementer
 from .parse import AngularCommitParser
 from .version_control_system import Git
 from .config import Config
 from . import errors
-from .types import Version, VersionIncrement, RawCommit, InvalidCommitAction, ChangelogFormat
+from .types import (
+    Version,
+    VersionIncrement,
+    RawCommit,
+    InvalidCommitAction,
+    ChangelogFormat,
+)
 from . import hooks
 from .changelog import ChangelogAssembler
 
@@ -97,6 +105,4 @@ def changelog(config: Config, format=ChangelogFormat):
     if format == ChangelogFormat.pretty:
         print(changelog)
     elif format == ChangelogFormat.json:
-        import json
-        from dataclasses import asdict
         print(json.dumps(asdict(changelog), indent=2))
