@@ -78,7 +78,7 @@ class ChangelogData:
                     segments.extend(str(ch) for ch in scope_changes)
                     segments.append('')
 
-        if segments[-1] == '':
+        if segments and segments[-1] == '':
             segments = segments[:-1]
 
         return '\n'.join(segments)

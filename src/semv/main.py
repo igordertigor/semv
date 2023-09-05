@@ -3,6 +3,7 @@ import sys
 from . import errors
 from . import commands
 from .config import Config
+from .types import ChangelogFormat
 
 
 def main():
@@ -21,8 +22,13 @@ def main():
             print(commands.version_string(config), end='')
         elif len(sys.argv) == 3 and sys.argv[1] == '--commit-msg':
             commands.commit_msg(sys.argv[2], config)
-        elif len(sys.argv) and sys.argv[1] == '--changelog':
-            commands.changelog(config)
+        elif len(sys.argv):
+            if sys.argv[1].startswith('--changelog'):
+                if '=' in sys.argv[1]:
+                    fmt = sys.argv[1].split('=')[1]
+                else:
+                    fmt = 'pretty'
+                commands.changelog(config, format=ChangelogFormat(fmt))
     except errors.NoNewVersion:
         sys.stderr.write('WARNING: No changes for new version\n')
         sys.exit(1)

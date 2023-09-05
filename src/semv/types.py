@@ -63,3 +63,8 @@ class Version:
         elif inc == VersionIncrement.patch:
             return replace(self, patch=self.patch + 1)
         raise RuntimeError('This should never happen')
+
+
+class ChangelogFormat(str, Enum):
+    pretty = 'pretty'
+    json = 'json'

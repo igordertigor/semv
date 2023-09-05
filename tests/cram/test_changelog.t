@@ -88,3 +88,44 @@ Add breaking change
   
   # Fixes
   - myscript: fix typo
+
+  $ semv --changelog=json
+  {
+    "breaking_changes": [
+      {
+        "scope": "myscript",
+        "message": "Need name",
+        "info": [
+          "Need to pass a name to greet now"
+        ]
+      }
+    ],
+    "major_changes": {},
+    "minor_changes": {
+      "feat": [
+        {
+          "scope": "general",
+          "messages": [
+            "Convert to api"
+          ]
+        },
+        {
+          "scope": "myscript",
+          "messages": [
+            "Improved message",
+            "Add docstring"
+          ]
+        }
+      ]
+    },
+    "patch_changes": {
+      "fix": [
+        {
+          "scope": "myscript",
+          "messages": [
+            "fix typo"
+          ]
+        }
+      ]
+    }
+  }
