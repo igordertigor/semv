@@ -1,13 +1,21 @@
-from typing import Dict, List
-from itertools import groupby
+from typing import Dict
+import json
+from dataclasses import asdict
+
 from .increment import DefaultIncrementer
 from .parse import AngularCommitParser
 from .version_control_system import Git
 from .config import Config
 from . import errors
-from .types import Version, VersionIncrement, RawCommit, InvalidCommitAction
+from .types import (
+    Version,
+    VersionIncrement,
+    RawCommit,
+    InvalidCommitAction,
+    ChangelogFormat,
+)
 from . import hooks
-from .changelog import Changelog
+from .changelog import ChangelogAssembler
 
 
 def list_types(config: Config) -> str:
@@ -76,7 +84,7 @@ def commit_msg(filename: str, config: Config):
         version_incrementer.get_version_increment(iter([parsed_commit]))
 
 
-def changelog(config: Config):
+def changelog(config: Config, format=ChangelogFormat):
     vcs = Git()
     cp = AngularCommitParser(
         config.invalid_commit_action,
@@ -88,19 +96,13 @@ def changelog(config: Config):
         cp.parse(c) for c in vcs.get_commits_without(current_version)
     )
     commits = reversed([c for c in commits_or_none if c is not None])
-    cngl = Changelog()
-    grouped_commits = cngl.group_commits(commits)
-    messages = []
-    breaking = grouped_commits.pop('breaking', None)
-    if breaking:
-        messages.append(cngl.format_breaking(breaking))
-
-    messages += [
-        cngl.format_release_commits(iter(types), grouped_commits)
-        for types in [
-            config.commit_types_major,
-            config.commit_types_minor,
-            config.commit_types_patch,
-        ]
-    ]
-    print('\n\n'.join(m for m in messages if m))
+    cl_assembler = ChangelogAssembler(
+        config.commit_types_major,
+        config.commit_types_minor,
+        config.commit_types_patch,
+    )
+    changelog = cl_assembler.assemble(commits)
+    if format == ChangelogFormat.pretty:
+        print(changelog)
+    elif format == ChangelogFormat.json:
+        print(json.dumps(asdict(changelog), indent=2))
